@@ -184,9 +184,7 @@ def save_file(result, filename="compound_data.json"):
 
 
 def fetch_similar_compounds(smiles, threshold=95, max_records=100):
-    """
-    Fetch compounds with similar 2D structure to the given SMILES string.
-    """
+
     url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastsimilarity_2d/smiles/{smiles}/cids/JSON?Threshold={threshold}&MaxRecords={max_records}"
     try:
         response = requests.get(url, timeout=10)
@@ -207,9 +205,7 @@ def fetch_similar_compounds(smiles, threshold=95, max_records=100):
 
 
 def fetch_substructure_compounds(smiles, max_records=100):
-    """
-    Fetch compounds that are substructures of the given SMILES string.
-    """
+    
     url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastsubstructure/smiles/{smiles}/cids/JSON?MatchIsotopes=true&MaxRecords={max_records}"
     
     
@@ -232,9 +228,7 @@ def fetch_substructure_compounds(smiles, max_records=100):
 
 
 def fetch_superstructure_compounds(smiles, max_records=100):
-    """
-    Fetch compounds that are superstructures of the given SMILES string.
-    """
+    
     url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastsuperstructure/smiles/{smiles}/cids/JSON?MatchIsotopes=true&MaxRecords={max_records}"
     try:
         response = requests.get(url, timeout=10)
