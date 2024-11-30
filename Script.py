@@ -22,41 +22,59 @@ def fetch_CID(SMILES):
     except (json.JSONDecodeError, KeyError) as e:
         return f"Data Error: Unexpected API response format - {e}"
 
+import requests
+from requests.exceptions import Timeout, RequestException
+
 def fetch_molecule_details(cid):
+    """
+    Fetches all descriptions and related information for a given compound ID (CID) from PubChem.
+
+    Parameters:
+        cid (int or str): The Compound ID to fetch details for.
+
+    Returns:
+        list or dict: A list of dictionaries containing all information entries,
+                      or a single dictionary with an error message.
+    """
     url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/{cid}/description/JSON"
+    
     try:
         response = requests.get(url, timeout=10)
         response.raise_for_status()
         data = response.json()
 
-        descriptions = data.get("InformationList", {}).get("Information", [{}])
+        # Extract the InformationList from the response
+        information_list = data.get("InformationList", {}).get("Information", [])
 
-        # Initialize default response structure
-        result = {
-            "Description": "No Description available",
-            "Toxicology": {
-                "Description": "No Toxicology information available",
+        # Initialize the results list
+        results = []
+
+        if information_list:
+            for info in information_list:
+                # Create a dictionary for each information entry
+                details = {
+                    "CID": info.get("CID", "N/A"),
+                    "Description": info.get("Description", "No Description available"),
+                    "Source": info.get("DescriptionSourceName", "N/A"),
+                    "URL": info.get("DescriptionURL", "N/A")
+                }
+
+                # Optionally include all other fields dynamically
+                # Uncomment the following lines if you want to include all available fields
+                # for key, value in info.items():
+                #     if key not in details:
+                #         details[key] = value
+
+                results.append(details)
+        else:
+            # Add a default entry only if no information is available
+            results.append({
+                "Description": "No Description available",
                 "Source": "N/A",
                 "URL": "N/A"
-            }
-        }
+            })
 
-        if descriptions:
-            # Extract general description
-            general_info = descriptions[2] if len(descriptions) > 2 else {}
-            result["Description"] = general_info.get("Description", "No Description available")
-            
-            # Extract toxicology information
-            toxicology_info = descriptions[1] if len(descriptions) > 1 else {}
-            result["Toxicology"] = {
-                "Description": toxicology_info.get("Description", "No Toxicology information available"),
-                "Source": toxicology_info.get("DescriptionSourceName", "N/A"),
-                "URL": toxicology_info.get("DescriptionURL", "N/A")
-            }
-        else:
-            result["error"] = "No information available in the API response."
-
-        return result
+        return results
 
     except Timeout:
         return {"error": "Request timed out while fetching data."}
@@ -64,7 +82,8 @@ def fetch_molecule_details(cid):
         return {"error": f"Network issue occurred: {e}"}
     except (KeyError, IndexError, ValueError) as e:
         return {"error": f"Unexpected data format: {e}"}
-    
+
+
 
 def fetch_synonyms(cid):
     url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/{cid}/synonyms/JSON"
