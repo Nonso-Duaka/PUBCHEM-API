@@ -22,20 +22,9 @@ def fetch_CID(SMILES):
     except (json.JSONDecodeError, KeyError) as e:
         return f"Data Error: Unexpected API response format - {e}"
 
-import requests
-from requests.exceptions import Timeout, RequestException
 
 def fetch_molecule_details(cid):
-    """
-    Fetches all descriptions and related information for a given compound ID (CID) from PubChem.
-
-    Parameters:
-        cid (int or str): The Compound ID to fetch details for.
-
-    Returns:
-        list or dict: A list of dictionaries containing all information entries,
-                      or a single dictionary with an error message.
-    """
+   
     url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/{cid}/description/JSON"
     
     try:
@@ -59,11 +48,6 @@ def fetch_molecule_details(cid):
                     "URL": info.get("DescriptionURL", "N/A")
                 }
 
-                # Optionally include all other fields dynamically
-                # Uncomment the following lines if you want to include all available fields
-                # for key, value in info.items():
-                #     if key not in details:
-                #         details[key] = value
 
                 results.append(details)
         else:
