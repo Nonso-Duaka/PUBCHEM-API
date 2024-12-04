@@ -67,7 +67,35 @@ def fetch_molecule_details(cid):
     except (KeyError, IndexError, ValueError) as e:
         return {"error": f"Unexpected data format: {e}"}
 
+def fetch_patents(cid):
+   url= f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/{cid}/assaysummary/JSON"
+   response = requests.get(url)
+   data = response.json()
+   print(data)
 
+def fetch_suppliers(cid):
+    url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/{cid}/property/ChemicalVendor/JSON"
+    try:
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+        
+        sources = data.get('InformationList', {}).get('Information', [])
+        suppliers_info = []
+        
+        for source in sources:
+            if "SourceName" in source:
+                suppliers_info.append({
+                    "Supplier": source.get("SourceName", "N/A"),
+                    "URL": source.get("SourceURL", "N/A")
+                })
+
+        if suppliers_info:
+            return suppliers_info
+        else:
+            return {"error": "No supplier information available"}
+    except requests.exceptions.RequestException as e:
+        return {"error": f"Failed to retrieve supplier information due to network issue: {e}"}
 
 def fetch_synonyms(cid):
     url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/{cid}/synonyms/JSON"
@@ -270,6 +298,8 @@ def main():
     property = fetch_compounds_properties(cid)
     synonyms = fetch_synonyms(cid)
     safety_info = fetch_hazard_information(cid)
+    patents = fetch_patents(cid)
+    suppliers = fetch_suppliers(cid)
     similar_compounds = fetch_similar_compounds(SMILES, threshold)  
     substructure_compounds = fetch_substructure_compounds(SMILES)
     superstructure_compounds = fetch_superstructure_compounds(SMILES)
@@ -279,6 +309,8 @@ def main():
         "Properties": property,
         "Synonyms": synonyms,
         "Safety Information": safety_info,
+        "Patents": patents,
+        "Suppliers": suppliers,
         "Similar Compounds": similar_compounds,
         "Substructure Compounds":substructure_compounds,
         "Superstructure Compounds":superstructure_compounds
