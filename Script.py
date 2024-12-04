@@ -22,6 +22,35 @@ def fetch_CID(SMILES):
     except (json.JSONDecodeError, KeyError) as e:
         return f"Data Error: Unexpected API response format - {e}"
 
+def fetch_patents_by_cid(cid):
+    # PubChem API URL to get patent data for the given CID
+    url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/{cid}/patents/JSON"
+    
+    # Send GET request to fetch patent data
+    response = requests.get(url)
+    
+    if response.status_code == 200:
+        data = response.json()
+        
+        # Check if patents are present in the response
+        if "Patent" in data:
+            patents = data["Patent"]
+            patent_info = []
+            for patent in patents:
+                # Extract patent number and title (if available)
+                patent_number = patent.get("PatentNumber", "No patent number")
+                patent_title = patent.get("Title", "No title available")
+                
+                patent_info.append({
+                    "Patent Number": patent_number,
+                    "Title": patent_title
+                })
+            return patent_info
+        else:
+            return {"Error": "No patents found for this CID."}
+    else:
+        return {"Error": f"Failed to fetch patent data. Status code: {response.status_code}"}
+
 
 def fetch_molecule_details(cid):
    
@@ -67,19 +96,76 @@ def fetch_molecule_details(cid):
     except (KeyError, IndexError, ValueError) as e:
         return {"error": f"Unexpected data format: {e}"}
 
+
+
 def fetch_patents(cid):
-   url= f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/{cid}/assaysummary/JSON"
-   response = requests.get(url)
-   data = response.json()
-   print(data)
+   
+    try:
+        # Request for patent-related properties (PatentCount, PatentFamilyCount)
+        url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/{cid}/property/PatentCount,PatentFamilyCount/JSON"
+        response = requests.get(url)
+        
+        if response.status_code == 200:
+            data = response.json()
+            properties = data.get("PropertyTable", {}).get("Properties", [])
+            
+            # If properties are found, extract patent information
+            if properties:
+                result = properties[0]  # As we request multiple properties, take the first result
+                patent_count = result.get("PatentCount", "Not available")
+                patent_family_count = result.get("PatentFamilyCount", "Not available")
+                
+                return {
+                    "PatentCount": patent_count,
+                    "PatentFamilyCount": patent_family_count
+                }
+            else:
+                return {"CID": cid, "Error": "No patent data available"}
+        else:
+            return {"CID": cid, "Error": f"Failed to fetch data. Status code: {response.status_code}"}
+    
+    except requests.exceptions.RequestException as e:
+        return {"CID": cid, "Error": f"An error occurred: {str(e)}"}
+
+
+"""def fetch_patents_by_cid(cid):
+    url = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/classification/hnid/4501233/patents/JSON"
+    response = requests.get(url)
+    
+    # Check if the request was successful
+    if response.status_code != 200:
+        return {"Error": f"Failed to fetch data. Status code: {response.status_code}"}
+    
+    # Attempt to parse the JSON response
+    try:
+        data = response.json()
+    except ValueError:
+        return {"Error": "Invalid JSON response"}
+    
+    # Extract patent data from the parsed JSON
+    patents = data.get("Patents", [])
+    if not patents:
+        return {"Error": "No patent data available"}
+    
+    # Filter patents by the given CID
+    filtered_patents = [patent for patent in patents if patent.get("CID") == str(cid)]
+    if not filtered_patents:
+        return {"CID": cid, "Error": "No patent data found for this CID"}
+    
+    return {"CID": cid, "Patents": filtered_patents}
+
 
 def fetch_suppliers(cid):
-    url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/{cid}/property/ChemicalVendor/JSON"
+    # Update the URL to fetch information from the 'substance' source table
+    url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/sourcetable/substance/JSON?cid={cid}"
+
     try:
+        # Send the GET request with a timeout to avoid hanging
         response = requests.get(url, timeout=10)
-        response.raise_for_status()
+        response.raise_for_status()  # Raise exception for 4xx/5xx responses
         data = response.json()
         
+        # Extract supplier information from the response
         sources = data.get('InformationList', {}).get('Information', [])
         suppliers_info = []
         
@@ -90,12 +176,16 @@ def fetch_suppliers(cid):
                     "URL": source.get("SourceURL", "N/A")
                 })
 
+        # Return supplier info or an error message if no suppliers found
         if suppliers_info:
             return suppliers_info
         else:
             return {"error": "No supplier information available"}
+
     except requests.exceptions.RequestException as e:
-        return {"error": f"Failed to retrieve supplier information due to network issue: {e}"}
+        # Handle network errors, including timeouts and invalid responses
+        return {"error": f"Failed to retrieve supplier information due to network issue: {e}"}"""
+
 
 def fetch_synonyms(cid):
     url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/{cid}/synonyms/JSON"
@@ -298,8 +388,9 @@ def main():
     property = fetch_compounds_properties(cid)
     synonyms = fetch_synonyms(cid)
     safety_info = fetch_hazard_information(cid)
-    patents = fetch_patents(cid)
-    suppliers = fetch_suppliers(cid)
+    patents_count = fetch_patents(cid)
+    #patent_numbers =  fetch_patents_by_cid(cid)
+    #suppliers = fetch_suppliers(cid)
     similar_compounds = fetch_similar_compounds(SMILES, threshold)  
     substructure_compounds = fetch_substructure_compounds(SMILES)
     superstructure_compounds = fetch_superstructure_compounds(SMILES)
@@ -309,8 +400,9 @@ def main():
         "Properties": property,
         "Synonyms": synonyms,
         "Safety Information": safety_info,
-        "Patents": patents,
-        "Suppliers": suppliers,
+        "Patents": patents_count,
+        #"Patent Numbers": patent_numbers,
+        #"Suppliers": suppliers,
         "Similar Compounds": similar_compounds,
         "Substructure Compounds":substructure_compounds,
         "Superstructure Compounds":superstructure_compounds
