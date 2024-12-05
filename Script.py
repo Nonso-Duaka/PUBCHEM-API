@@ -318,8 +318,7 @@ def save_file(result, filename="compound_data.json"):
 
 
 def fetch_similar_compounds(smiles, threshold=95, max_records=100):
-    url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastsimilarity_2d/smiles/{smiles}/cids/JSON?Threshold={threshold}&MaxRecords={max_records}"
-    
+    url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastsimilarity_2d/smiles/{smiles}/cids/JSON?Threshold={threshold}&MaxRecords={max_records}" 
     try:
         response = requests.get(url, timeout=10)
         response.raise_for_status()
