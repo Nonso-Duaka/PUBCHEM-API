@@ -21,73 +21,36 @@ def fetch_CID(SMILES):
         return f"Network Error: {e}"
     except (json.JSONDecodeError, KeyError) as e:
         return f"Data Error: Unexpected API response format - {e}"
-
-def fetch_patents_by_cid(cid):
-    # PubChem API URL to get patent data for the given CID
-    url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/{cid}/patents/JSON"
     
-    # Send GET request to fetch patent data
-    response = requests.get(url)
-    
-    if response.status_code == 200:
-        data = response.json()
-        
-        # Check if patents are present in the response
-        if "Patent" in data:
-            patents = data["Patent"]
-            patent_info = []
-            for patent in patents:
-                # Extract patent number and title (if available)
-                patent_number = patent.get("PatentNumber", "No patent number")
-                patent_title = patent.get("Title", "No title available")
-                
-                patent_info.append({
-                    "Patent Number": patent_number,
-                    "Title": patent_title
-                })
-            return patent_info
-        else:
-            return {"Error": "No patents found for this CID."}
-    else:
-        return {"Error": f"Failed to fetch patent data. Status code: {response.status_code}"}
-
 
 def fetch_molecule_details(cid):
-   
     url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/{cid}/description/JSON"
     
     try:
         response = requests.get(url, timeout=10)
         response.raise_for_status()
         data = response.json()
-
-        # Extract the InformationList from the response
         information_list = data.get("InformationList", {}).get("Information", [])
-
-        # Initialize the results list
         results = []
 
-        if information_list:
-            for info in information_list:
-                # Create a dictionary for each information entry
-                details = {
-                    "CID": info.get("CID", "N/A"),
-                    "Description": info.get("Description", "No Description available"),
-                    "Source": info.get("DescriptionSourceName", "N/A"),
-                    "URL": info.get("DescriptionURL", "N/A")
-                }
+        for info in information_list:
+            details = {
+                "CID": info.get("CID", "N/A")
+            }
+            description = info.get("Description")
+            source = info.get("DescriptionSourceName")
+            url = info.get("DescriptionURL")
+            
+            if description:
+                details["Description"] = description
+            if source:
+                details["Source"] = source
+            if url:
+                details["URL"] = url
 
+            results.append(details)
 
-                results.append(details)
-        else:
-            # Add a default entry only if no information is available
-            results.append({
-                "Description": "No Description available",
-                "Source": "N/A",
-                "URL": "N/A"
-            })
-
-        return results
+        return results if results else [{"error": "No information available for the given CID."}]
 
     except Timeout:
         return {"error": "Request timed out while fetching data."}
@@ -95,7 +58,6 @@ def fetch_molecule_details(cid):
         return {"error": f"Network issue occurred: {e}"}
     except (KeyError, IndexError, ValueError) as e:
         return {"error": f"Unexpected data format: {e}"}
-
 
 
 def fetch_patents(cid):
@@ -208,8 +170,23 @@ def fetch_synonyms(cid):
     except (json.JSONDecodeError, KeyError) as e:
         return {"error": f"Data Error: Unexpected API response format - {e}"}
 
+
+
 def fetch_compounds_properties(cid):
-    url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/{cid}/property/MolecularWeight,MolecularFormula,IsomericSMILES,CanonicalSMILES,IUPACName,Charge/JSON"
+    url = (
+        f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/{cid}/property/"
+        "MolecularFormula,MolecularWeight,CanonicalSMILES,IsomericSMILES,InChI,InChIKey,"
+        "IUPACName,Title,XLogP,ExactMass,MonoisotopicMass,TPSA,Complexity,Charge,"
+        "HBondDonorCount,HBondAcceptorCount,RotatableBondCount,HeavyAtomCount,"
+        "IsotopeAtomCount,AtomStereoCount,DefinedAtomStereoCount,UndefinedAtomStereoCount,"
+        "BondStereoCount,DefinedBondStereoCount,UndefinedBondStereoCount,CovalentUnitCount,"
+        "PatentCount,PatentFamilyCount,LiteratureCount,Volume3D,XStericQuadrupole3D,"
+        "YStericQuadrupole3D,ZStericQuadrupole3D,FeatureCount3D,FeatureAcceptorCount3D,"
+        "FeatureDonorCount3D,FeatureAnionCount3D,FeatureCationCount3D,FeatureRingCount3D,"
+        "FeatureHydrophobeCount3D,ConformerModelRMSD3D,EffectiveRotorCount3D,"
+        "ConformerCount3D,Fingerprint2D/JSON"
+    )
+    
     try:
         response = requests.get(url, timeout=10)
         response.raise_for_status()
@@ -221,8 +198,48 @@ def fetch_compounds_properties(cid):
             result = {
                 "Molecular Formula": Property.get("MolecularFormula", "N/A"),
                 "Molecular Weight": Property.get("MolecularWeight", "N/A"),
+                "Canonical SMILES": Property.get("CanonicalSMILES", "N/A"),
                 "Isomeric SMILES": Property.get("IsomericSMILES", "N/A"),
-                "IUPAC Name": Property.get("IUPACName", "N/A")
+                "InChI": Property.get("InChI", "N/A"),
+                "InChIKey": Property.get("InChIKey", "N/A"),
+                "IUPAC Name": Property.get("IUPACName", "N/A"),
+                "Title": Property.get("Title", "N/A"),
+                "XLogP": Property.get("XLogP", "N/A"),
+                "Exact Mass": Property.get("ExactMass", "N/A"),
+                "Monoisotopic Mass": Property.get("MonoisotopicMass", "N/A"),
+                "Topological Polar Surface Area (TPSA)": Property.get("TPSA", "N/A"),
+                "Complexity": Property.get("Complexity", "N/A"),
+                "Charge": Property.get("Charge", "N/A"),
+                "Hydrogen Bond Donor Count": Property.get("HBondDonorCount", "N/A"),
+                "Hydrogen Bond Acceptor Count": Property.get("HBondAcceptorCount", "N/A"),
+                "Rotatable Bond Count": Property.get("RotatableBondCount", "N/A"),
+                "Heavy Atom Count": Property.get("HeavyAtomCount", "N/A"),
+                "Isotope Atom Count": Property.get("IsotopeAtomCount", "N/A"),
+                "Atom Stereo Count": Property.get("AtomStereoCount", "N/A"),
+                "Defined Atom Stereo Count": Property.get("DefinedAtomStereoCount", "N/A"),
+                "Undefined Atom Stereo Count": Property.get("UndefinedAtomStereoCount", "N/A"),
+                "Bond Stereo Count": Property.get("BondStereoCount", "N/A"),
+                "Defined Bond Stereo Count": Property.get("DefinedBondStereoCount", "N/A"),
+                "Undefined Bond Stereo Count": Property.get("UndefinedBondStereoCount", "N/A"),
+                "Covalent Unit Count": Property.get("CovalentUnitCount", "N/A"),
+                "Patent Count": Property.get("PatentCount", "N/A"),
+                "Patent Family Count": Property.get("PatentFamilyCount", "N/A"),
+                "Literature Count": Property.get("LiteratureCount", "N/A"),
+                "Volume (3D)": Property.get("Volume3D", "N/A"),
+                "X Steric Quadrupole (3D)": Property.get("XStericQuadrupole3D", "N/A"),
+                "Y Steric Quadrupole (3D)": Property.get("YStericQuadrupole3D", "N/A"),
+                "Z Steric Quadrupole (3D)": Property.get("ZStericQuadrupole3D", "N/A"),
+                "Feature Count (3D)": Property.get("FeatureCount3D", "N/A"),
+                "Feature Acceptor Count (3D)": Property.get("FeatureAcceptorCount3D", "N/A"),
+                "Feature Donor Count (3D)": Property.get("FeatureDonorCount3D", "N/A"),
+                "Feature Anion Count (3D)": Property.get("FeatureAnionCount3D", "N/A"),
+                "Feature Cation Count (3D)": Property.get("FeatureCationCount3D", "N/A"),
+                "Feature Ring Count (3D)": Property.get("FeatureRingCount3D", "N/A"),
+                "Feature Hydrophobe Count (3D)": Property.get("FeatureHydrophobeCount3D", "N/A"),
+                "Conformer Model RMSD (3D)": Property.get("ConformerModelRMSD3D", "N/A"),
+                "Effective Rotor Count (3D)": Property.get("EffectiveRotorCount3D", "N/A"),
+                "Conformer Count (3D)": Property.get("ConformerCount3D", "N/A"),
+                "Fingerprint (2D)": Property.get("Fingerprint2D", "N/A")
             }
             return result
         else:
@@ -235,6 +252,7 @@ def fetch_compounds_properties(cid):
         return {"error": f"Data Error: Unexpected API response format - {e}"}
 
 
+    
 
 def fetch_hazard_information(cid):
     url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/{cid}/JSON/?response_type=display&heading=GHS%20Classification"
@@ -243,8 +261,7 @@ def fetch_hazard_information(cid):
         response = requests.get(url, timeout=10)
         response.raise_for_status()
         data = response.json()
-        
-        # Navigate to the desired section
+     
         safety_section = next(
             section for section in data["Record"]["Section"]
             if section["TOCHeading"] == "Safety and Hazards"
@@ -257,23 +274,20 @@ def fetch_hazard_information(cid):
             section for section in hazards_section["Section"]
             if section["TOCHeading"] == "GHS Classification"
         )
-        
-        # Extract pictograms
+      
         pictograms = [
             markup["URL"]
             for info in ghs_section["Information"]
             if info["Name"] == "Pictogram(s)"
             for markup in info["Value"]["StringWithMarkup"][0]["Markup"]
         ]
-        
-        # Extract signal word
+      
         signal = next(
             info["Value"]["StringWithMarkup"][0]["String"]
             for info in ghs_section["Information"]
             if info["Name"] == "Signal"
         )
-        
-        # Extract hazard statements
+       
         hazard_statements = [
             statement["String"]
             for info in ghs_section["Information"]
@@ -281,7 +295,6 @@ def fetch_hazard_information(cid):
             for statement in info["Value"]["StringWithMarkup"]
         ]
         
-        # Combine results into a structured dictionary
         result = {
             "Pictograms": pictograms,
             "Signal": signal,
@@ -305,18 +318,36 @@ def save_file(result, filename="compound_data.json"):
 
 
 def fetch_similar_compounds(smiles, threshold=95, max_records=100):
-
     url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastsimilarity_2d/smiles/{smiles}/cids/JSON?Threshold={threshold}&MaxRecords={max_records}"
+    
     try:
         response = requests.get(url, timeout=10)
         response.raise_for_status()
         data = response.json()
-
         cids = data.get("IdentifierList", {}).get("CID", [])
-        if cids:
-            return {"Similar Compounds": cids}
-        else:
+        if not cids:
             return {"error": "No similar compounds found. Please adjust the threshold or check the SMILES input."}
+
+        compound_data = []
+        for cid in cids:
+            prop_url = (
+                f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/{cid}/property/"
+                "CanonicalSMILES/JSON"
+            )
+            try:
+                prop_response = requests.get(prop_url, timeout=5)
+                prop_response.raise_for_status()
+                prop_data = prop_response.json()
+                properties = prop_data.get('PropertyTable', {}).get('Properties', [])
+                if properties:
+                    smiles_string = properties[0].get("CanonicalSMILES", "N/A")
+                    compound_data.append({"CID": cid, "SMILES": smiles_string})
+            except Exception as e:
+                continue
+        if compound_data:
+            return {"Similar Compounds": compound_data}
+        else:
+            return {"error": "Failed to retrieve SMILES strings for the similar compounds."}
     except Timeout:
         return {"error": "Request timed out while fetching similar compounds."}
     except RequestException as e:
@@ -371,8 +402,7 @@ def fetch_superstructure_compounds(smiles, max_records=100):
 def main():
     SMILES = input("Enter the SMILES of your choice: ").strip()
     threshold = input("Enter the Tanimoto coefficient threshold (default is 95): ").strip()
-    
-    # Default threshold if user input is empty or invalid
+
     if not threshold.isdigit():
         threshold = 95
     else:

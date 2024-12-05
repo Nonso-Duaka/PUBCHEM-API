@@ -1,10 +1,7 @@
 {
     "Description": [
         {
-            "CID": 2244,
-            "Description": "No Description available",
-            "Source": "N/A",
-            "URL": "N/A"
+            "CID": 2244
         },
         {
             "CID": 2244,
@@ -22,8 +19,48 @@
     "Properties": {
         "Molecular Formula": "C9H8O4",
         "Molecular Weight": "180.16",
+        "Canonical SMILES": "CC(=O)OC1=CC=CC=C1C(=O)O",
         "Isomeric SMILES": "CC(=O)OC1=CC=CC=C1C(=O)O",
-        "IUPAC Name": "2-acetyloxybenzoic acid"
+        "InChI": "InChI=1S/C9H8O4/c1-6(10)13-8-5-3-2-4-7(8)9(11)12/h2-5H,1H3,(H,11,12)",
+        "InChIKey": "BSYNRYMUTXBXSQ-UHFFFAOYSA-N",
+        "IUPAC Name": "2-acetyloxybenzoic acid",
+        "Title": "Aspirin",
+        "XLogP": 1.2,
+        "Exact Mass": "180.04225873",
+        "Monoisotopic Mass": "180.04225873",
+        "Topological Polar Surface Area (TPSA)": 63.6,
+        "Complexity": 212,
+        "Charge": 0,
+        "Hydrogen Bond Donor Count": 1,
+        "Hydrogen Bond Acceptor Count": 4,
+        "Rotatable Bond Count": 3,
+        "Heavy Atom Count": 13,
+        "Isotope Atom Count": 0,
+        "Atom Stereo Count": 0,
+        "Defined Atom Stereo Count": 0,
+        "Undefined Atom Stereo Count": 0,
+        "Bond Stereo Count": 0,
+        "Defined Bond Stereo Count": 0,
+        "Undefined Bond Stereo Count": 0,
+        "Covalent Unit Count": 1,
+        "Patent Count": 417932,
+        "Patent Family Count": 138375,
+        "Literature Count": 134489,
+        "Volume (3D)": 136,
+        "X Steric Quadrupole (3D)": 3.86,
+        "Y Steric Quadrupole (3D)": 2.45,
+        "Z Steric Quadrupole (3D)": 0.89,
+        "Feature Count (3D)": 5,
+        "Feature Acceptor Count (3D)": 3,
+        "Feature Donor Count (3D)": 0,
+        "Feature Anion Count (3D)": 1,
+        "Feature Cation Count (3D)": 0,
+        "Feature Ring Count (3D)": 1,
+        "Feature Hydrophobe Count (3D)": 0,
+        "Conformer Model RMSD (3D)": 0.6,
+        "Effective Rotor Count (3D)": 3,
+        "Conformer Count (3D)": 10,
+        "Fingerprint (2D)": "AAADccBwOAAAAAAAAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAABAAAAGgAACAAADASAmAAyDoAABgCIAiDSCAACCAAkIAAIiAEGCMgMJzaENRqCe2Cl4BEIuYeIyCCOAAAAAAAIAAAAAAAAABAAAAAAAAAAAA=="
     },
     "Synonyms": {
         "Synonyms": [
@@ -693,106 +730,406 @@
     },
     "Similar Compounds": {
         "Similar Compounds": [
-            4133,
-            2244,
-            5161,
-            8361,
-            8365,
-            61151,
-            11370,
-            16330,
-            15109,
-            9458,
-            81784,
-            68484,
-            68093,
-            69091,
-            10745,
-            69092,
-            50216,
-            69461,
-            78094,
-            67252,
-            3434975,
-            135269,
-            61159,
-            285225,
-            75237,
-            15110,
-            76027,
-            221644,
-            517799,
-            77627,
-            1810581,
-            16667734,
-            578689,
-            6247,
-            3053800,
-            71586929,
-            2777223,
-            16716,
-            233038,
-            238669,
-            289454,
-            520167,
-            597164,
-            11424104,
-            15574215,
-            7798110,
-            67256,
-            222469,
-            2360902,
-            54689724,
-            162666,
-            95938,
-            197341,
-            458215,
-            3032790,
-            26579,
-            13417103,
-            223348,
-            2760340,
-            2778523,
-            237228,
-            423920,
-            539215,
-            578656,
-            2737361,
-            2737364,
-            2763380,
-            3798703,
-            4095443,
-            2106594,
-            2063348,
-            89799,
-            6950218,
-            23648078,
-            54695440,
-            23664178,
-            54677775,
-            73923,
-            89098,
-            95729,
-            10902097,
-            23616336,
-            91758756,
-            24965888,
-            94716,
-            160267,
-            198203,
-            3055063,
-            23666729,
-            80184,
-            94717,
-            6450596,
-            4086166,
-            11528644,
-            12210348,
-            12357674,
-            13450756,
-            14955523,
-            17607740,
-            19846254
+            {
+                "CID": 4133,
+                "SMILES": "COC(=O)C1=CC=CC=C1O"
+            },
+            {
+                "CID": 2244,
+                "SMILES": "CC(=O)OC1=CC=CC=C1C(=O)O"
+            },
+            {
+                "CID": 5161,
+                "SMILES": "C1=CC=C(C(=C1)C(=O)OC2=CC=CC=C2C(=O)O)O"
+            },
+            {
+                "CID": 8361,
+                "SMILES": "C1=CC=C(C=C1)OC(=O)C2=CC=CC=C2O"
+            },
+            {
+                "CID": 8365,
+                "SMILES": "CCOC(=O)C1=CC=CC=C1O"
+            },
+            {
+                "CID": 61151,
+                "SMILES": "COC1=CC=CC=C1C(=O)OC"
+            },
+            {
+                "CID": 11370,
+                "SMILES": "COC1=CC=CC=C1C(=O)O"
+            },
+            {
+                "CID": 16330,
+                "SMILES": "CCCCOC(=O)C1=CC=CC=C1O"
+            },
+            {
+                "CID": 15109,
+                "SMILES": "COC1=C(C(=CC=C1)OC)C(=O)O"
+            },
+            {
+                "CID": 9458,
+                "SMILES": "CC(=O)OC1=C(C=CC(=C1)C(F)(F)F)C(=O)O"
+            },
+            {
+                "CID": 81784,
+                "SMILES": "CCOC(=O)C1=CC=CC=C1OC"
+            },
+            {
+                "CID": 68484,
+                "SMILES": "CC(=O)OC1=CC=CC=C1C(=O)OC"
+            },
+            {
+                "CID": 68093,
+                "SMILES": "CC(=O)OC1=CC=CC(=C1OC(=O)C)C(=O)O"
+            },
+            {
+                "CID": 69091,
+                "SMILES": "CC1=CC=C(C=C1)OC(=O)C2=CC=CC=C2O"
+            },
+            {
+                "CID": 10745,
+                "SMILES": "CC(=O)OC1=CC=CC=C1C(=O)OC2=CC=CC=C2C(=O)O"
+            },
+            {
+                "CID": 69092,
+                "SMILES": "CCCOC(=O)C1=CC=CC=C1O"
+            },
+            {
+                "CID": 50216,
+                "SMILES": "CC(=CCOC(=O)C1=CC=CC=C1O)C"
+            },
+            {
+                "CID": 69461,
+                "SMILES": "C1=CC=C(C(=C1)C(=O)O)OCC(=O)O"
+            },
+            {
+                "CID": 78094,
+                "SMILES": "CC1=C(C(=CC=C1)C(=O)O)OC(=O)C"
+            },
+            {
+                "CID": 67252,
+                "SMILES": "CCOC1=CC=CC=C1C(=O)O"
+            },
+            {
+                "CID": 3434975,
+                "SMILES": "CC(=O)OC1=CC=CC=C1C(=O)[O-]"
+            },
+            {
+                "CID": 135269,
+                "SMILES": "CCCCC(=O)OC1=CC=CC=C1C(=O)O"
+            },
+            {
+                "CID": 61159,
+                "SMILES": "CC1=CC=CC=C1OC(=O)C2=CC=CC=C2O"
+            },
+            {
+                "CID": 285225,
+                "SMILES": "COC(=O)C1=CC=CC=C1OC(=O)C2=CC=CC=C2"
+            },
+            {
+                "CID": 75237,
+                "SMILES": "C1=CC=C(C=C1)OC2=CC=CC=C2C(=O)O"
+            },
+            {
+                "CID": 15110,
+                "SMILES": "CC(=O)OC1=CC=CC=C1C(=O)OC(=O)C2=CC=CC=C2OC(=O)C"
+            },
+            {
+                "CID": 76027,
+                "SMILES": "COC1=CC(=C(C=C1)OC)C(=O)O"
+            },
+            {
+                "CID": 221644,
+                "SMILES": "CCOC1=CC=CC=C1C(=O)OCC"
+            },
+            {
+                "CID": 517799,
+                "SMILES": "COC1=CC=CC=C1C(=O)OC2=CC=CC=C2"
+            },
+            {
+                "CID": 77627,
+                "SMILES": "CC(=O)C1=CC=CC=C1OC(=O)C2=CC=CC=C2"
+            },
+            {
+                "CID": 1810581,
+                "SMILES": "C1=CC=C(C=C1)COC2=CC=CC=C2C(=O)O"
+            },
+            {
+                "CID": 16667734,
+                "SMILES": "C1=CC=C(C(=C1)C(=O)O)OC(=O)C=CC(=O)OC2=CC=CC=C2C(=O)O"
+            },
+            {
+                "CID": 578689,
+                "SMILES": "COC1=CC=CC=C1OC2=CC=CC=C2C(=O)O"
+            },
+            {
+                "CID": 6247,
+                "SMILES": "CC(=O)OC1=CC=CC=C1C(=O)[O-].CC(=O)OC1=CC=CC=C1C(=O)[O-].[Ca+2]"
+            },
+            {
+                "CID": 3053800,
+                "SMILES": "CCCCCCCC(=O)OC1=CC=CC=C1C(=O)O"
+            },
+            {
+                "CID": 71586929,
+                "SMILES": "CC(=O)OC1=CC=CC=C1C(=O)O.[O-2].[O-2].[O-2].[Al+3].[Al+3]"
+            },
+            {
+                "CID": 2777223,
+                "SMILES": "C1=CC=C(C(=C1)C(=O)O)OC(F)(F)F"
+            },
+            {
+                "CID": 16716,
+                "SMILES": "CC(=O)C1=CC=CC=C1OC(=O)C"
+            },
+            {
+                "CID": 233038,
+                "SMILES": "CC1=CC=CC=C1OC2=CC=CC=C2C(=O)O"
+            },
+            {
+                "CID": 238669,
+                "SMILES": "CC(=O)OC1=CC=CC(=C1)C(=O)O"
+            },
+            {
+                "CID": 289454,
+                "SMILES": "CCCCCCCCCCCCOC1=CC=CC=C1C(=O)O"
+            },
+            {
+                "CID": 520167,
+                "SMILES": "CC1=CC(=C(C=C1)OC)C(=O)O"
+            },
+            {
+                "CID": 597164,
+                "SMILES": "CC1=CC(=C(C=C1)C(=O)O)OC"
+            },
+            {
+                "CID": 11424104,
+                "SMILES": "CC(C)(C)OC(=O)C1=CC=CC=C1O"
+            },
+            {
+                "CID": 15574215,
+                "SMILES": "COC1=CC=CC=C1C(=O)OC(=O)C2=CC=CC=C2OC"
+            },
+            {
+                "CID": 7798110,
+                "SMILES": "COC1=CC=CC=C1COC(=O)C2=CC=CC=C2O"
+            },
+            {
+                "CID": 67256,
+                "SMILES": "CC(=O)OC1=CC=CC=C1C(=O)OC2=CC=CC=C2"
+            },
+            {
+                "CID": 222469,
+                "SMILES": "CCCCOC(=O)C1=CC=CC=C1OC"
+            },
+            {
+                "CID": 2360902,
+                "SMILES": "C1=CC=C(C=C1)OCCOC2=CC=CC=C2C(=O)O"
+            },
+            {
+                "CID": 54689724,
+                "SMILES": "CCCC(=O)C1=C(C2=CC=CC=C2OC1=O)O"
+            },
+            {
+                "CID": 162666,
+                "SMILES": "CC(=O)OC1=CC=CC=C1C(=O)O.C(=O)(N)N"
+            },
+            {
+                "CID": 95938,
+                "SMILES": "CCC(=O)OC1=CC=CC=C1C(=O)O"
+            },
+            {
+                "CID": 197341,
+                "SMILES": "CC1=C(C(=O)C=CO1)OC(=O)C2=CC=CC=C2OC(=O)C"
+            },
+            {
+                "CID": 458215,
+                "SMILES": "CC(=O)OC1=CC(=C(C=C1)C(=O)O)O"
+            },
+            {
+                "CID": 3032790,
+                "SMILES": "CC(=O)OC1=CC=CC=C1C(=O)[O-].CC(=O)OC1=CC=CC=C1C(=O)[O-].[OH-].[Al+3]"
+            },
+            {
+                "CID": 26579,
+                "SMILES": "COC(=O)OC1=CC=CC=C1C(=O)O"
+            },
+            {
+                "CID": 13417103,
+                "SMILES": "COCCOC1=CC=CC=C1C(=O)O"
+            },
+            {
+                "CID": 223348,
+                "SMILES": "CC(=O)OC1=CC(=C(C=C1)C(=O)O)OC(=O)C"
+            },
+            {
+                "CID": 2760340,
+                "SMILES": "CCOC(=O)C1=CC=CC=C1OC2=CC=CC=C2"
+            },
+            {
+                "CID": 2778523,
+                "SMILES": "C1=CC=C(C(=C1)C(=O)O)OC(C(F)F)(F)F"
+            },
+            {
+                "CID": 237228,
+                "SMILES": "CC(=O)OC1=CC=CC=C1C=O"
+            },
+            {
+                "CID": 423920,
+                "SMILES": "C1=CC=C(C(=C1)C(=O)O)OC2=CC=CC=C2C(=O)O"
+            },
+            {
+                "CID": 539215,
+                "SMILES": "CCCOC1=CC=CC=C1C(=O)O"
+            },
+            {
+                "CID": 578656,
+                "SMILES": "CC1=CC=C(C=C1)OC2=CC=CC=C2C(=O)O"
+            },
+            {
+                "CID": 2737361,
+                "SMILES": "COC1=C(C=CC=C1F)C(=O)O"
+            },
+            {
+                "CID": 2737364,
+                "SMILES": "COC1=C(C=C(C=C1)F)C(=O)O"
+            },
+            {
+                "CID": 2763380,
+                "SMILES": "C#CCOC1=CC=CC=C1C(=O)O"
+            },
+            {
+                "CID": 3798703,
+                "SMILES": "C=CCOC1=CC=CC=C1C(=O)O"
+            },
+            {
+                "CID": 4095443,
+                "SMILES": "CCCCCCCCCCCCCCCCOC1=CC=CC=C1C(=O)O"
+            },
+            {
+                "CID": 2106594,
+                "SMILES": "CC1=CC=CC=C1COC2=CC=CC=C2C(=O)O"
+            },
+            {
+                "CID": 2063348,
+                "SMILES": "C1=CC=C(C(=C1)C(=O)O)OC(F)F"
+            },
+            {
+                "CID": 89799,
+                "SMILES": "CCCCCOC(=O)C1=CC=CC=C1OC"
+            },
+            {
+                "CID": 6950218,
+                "SMILES": "COC1=CC=CC=C1C(=O)[O-]"
+            },
+            {
+                "CID": 23648078,
+                "SMILES": "CCCCCCOC(=O)C1=CC=CC=C1OC(=O)C=C"
+            },
+            {
+                "CID": 54695440,
+                "SMILES": "CCCCCCCCCCCC(=O)C1=C(C2=CC=CC=C2OC1=O)O"
+            },
+            {
+                "CID": 23664178,
+                "SMILES": "C1=CC=C(C=C1)OC2=CC=CC=C2C(=O)[O-].[Na+]"
+            },
+            {
+                "CID": 54677775,
+                "SMILES": "CCCCC(=O)C1=C(C2=CC=CC=C2OC1=O)O"
+            },
+            {
+                "CID": 73923,
+                "SMILES": "CC(=O)OC1=C(C=C(C=C1)I)C(=O)O"
+            },
+            {
+                "CID": 89098,
+                "SMILES": "COC1=CC(=CC=C1)OC2=CC=CC=C2C(=O)O"
+            },
+            {
+                "CID": 95729,
+                "SMILES": "COC1=CC=C(C=C1)OC2=CC=CC=C2C(=O)O"
+            },
+            {
+                "CID": 10902097,
+                "SMILES": "CC(=O)OC1=CC=CC=C1C(=O)OCCCO[N+](=O)[O-]"
+            },
+            {
+                "CID": 23616336,
+                "SMILES": "CC(=O)OCCOC(=O)C1=CC=CC=C1O"
+            },
+            {
+                "CID": 91758756,
+                "SMILES": "CC(=O)OC1=C(C=C(C=C1)CC2=CC(=C(C=C2)OC(=O)C)C(=O)O)C(=O)O"
+            },
+            {
+                "CID": 24965888,
+                "SMILES": "CCCCCCCCCCCCCCCC1=C(C(=CC=C1)OC(=O)C)C(=O)O"
+            },
+            {
+                "CID": 94716,
+                "SMILES": "CCCC(=O)OC1=CC=CC=C1C(=O)O"
+            },
+            {
+                "CID": 160267,
+                "SMILES": "CC(=O)OC1=C(C=C(C=C1I)I)C(=O)O"
+            },
+            {
+                "CID": 198203,
+                "SMILES": "CC(=C)C(=O)OC1=CC=CC=C1C(=O)O"
+            },
+            {
+                "CID": 3055063,
+                "SMILES": "CCCCCCC(=O)OC1=CC=CC=C1C(=O)O"
+            },
+            {
+                "CID": 23666729,
+                "SMILES": "CC(=O)OC1=CC=CC=C1C(=O)[O-].[Na+]"
+            },
+            {
+                "CID": 80184,
+                "SMILES": "C1=CC=C(C(=C1)C(=O)O)OC(=O)CCl"
+            },
+            {
+                "CID": 94717,
+                "SMILES": "CCCCCC(=O)OC1=CC=CC=C1C(=O)O"
+            },
+            {
+                "CID": 6450596,
+                "SMILES": "COC1=CC=CC=C1C(=O)C=CC(=O)O"
+            },
+            {
+                "CID": 4086166,
+                "SMILES": "COC1=C(C=C(C=C1)I)C(=O)O"
+            },
+            {
+                "CID": 11528644,
+                "SMILES": "C1=CC=C(C(=C1)C(=O)O)OCC(F)(F)F"
+            },
+            {
+                "CID": 12210348,
+                "SMILES": "C1CCC(CC1)OC2=CC=CC=C2C(=O)O"
+            },
+            {
+                "CID": 12357674,
+                "SMILES": "CC(C)OC1=CC=CC=C1C(=O)O"
+            },
+            {
+                "CID": 13450756,
+                "SMILES": "COC1=C(C=CC(=C1)I)C(=O)O"
+            },
+            {
+                "CID": 14955523,
+                "SMILES": "CCCCOC1=CC=CC=C1C(=O)O"
+            },
+            {
+                "CID": 17607740,
+                "SMILES": "C1=CC=C(C(=C1)C=O)OCCC(=O)O"
+            },
+            {
+                "CID": 19846254,
+                "SMILES": "C1=CC=C(C(=C1)C(=O)O)OCC#N"
+            }
         ]
     },
     "Substructure Compounds": {
