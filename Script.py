@@ -310,6 +310,49 @@ def fetch_hazard_information(cid):
         return {"error": f"Data Error: Unexpected API response format - {e}"}
 
 
+
+def fetch_active_assays(cid):
+  
+    url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/{cid}/assaysummary/JSON"
+    
+    try:
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+
+       
+        table = data.get("Table", {})
+        columns = table.get("Columns", {}).get("Column", [])
+        rows = table.get("Row", [])
+
+     
+        try:
+            outcome_index = columns.index("Activity Outcome")
+        except ValueError:
+            return {"error": "Activity Outcome column not found in data."}
+
+    
+        active_assays = []
+        for row in rows:
+            cells = row.get("Cell", [])
+            if len(cells) > outcome_index and cells[outcome_index] == "Active":
+                assay = {columns[i]: cells[i] for i in range(len(cells))}
+                active_assays.append(assay)
+
+        if not active_assays:
+            return {"error": "No active assays found for the provided CID."}
+
+        return {"ActiveAssays": active_assays}
+
+    except requests.exceptions.Timeout:
+        return {"error": "Request timed out while fetching assay summary data."}
+    except requests.exceptions.RequestException as e:
+        return {"error": f"Network issue occurred: {e}"}
+    except (ValueError, KeyError) as e:
+        return {"error": f"Unexpected API response format: {e}"}
+
+
+
 def save_file(result, filename="compound_data.json"):
     full_path = os.path.abspath(filename)
     with open(filename, "w") as jf:
@@ -418,6 +461,7 @@ def main():
     synonyms = fetch_synonyms(cid)
     safety_info = fetch_hazard_information(cid)
     patents_count = fetch_patents(cid)
+    bioassay_data = fetch_active_assays(cid)
     #patent_numbers =  fetch_patents_by_cid(cid)
     #suppliers = fetch_suppliers(cid)
     similar_compounds = fetch_similar_compounds(SMILES, threshold)  
@@ -430,6 +474,7 @@ def main():
         "Synonyms": synonyms,
         "Safety Information": safety_info,
         "Patents": patents_count,
+        "Bioassay Data": bioassay_data,
         #"Patent Numbers": patent_numbers,
         #"Suppliers": suppliers,
         "Similar Compounds": similar_compounds,
