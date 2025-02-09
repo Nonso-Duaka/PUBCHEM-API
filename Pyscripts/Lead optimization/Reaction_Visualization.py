@@ -72,8 +72,8 @@ for idx, (reaction_name, reaction_info) in enumerate(rxn_data.items()):
         if img_path:
             Rxn_list.append({
                 "reaction_name": reaction_name,
-                "smirks": smirks,
-                "reactants": reactants,
+                #"smirks": smirks,
+                #"reactants": reactants,
                 "image_path": img_path
             })
     except Exception as e:
