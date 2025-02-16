@@ -1,378 +1,833 @@
 [
     {
         "reaction_name": "1_Epoxide_and_Alcohol",
+        "smirks": "[CR1;H2,H1X4,H0X4:1]1O[CR1;H2,H1X4,H0X4:2]1.[#6&$([CR0,R1X3,R1X4])&!$([#6](=,-[OR0,SR0])[OR0]):3]-[OR0;H1,-]>>O[C:1][C:2]O-[#6:3]",
+        "reactants": [
+            "CC(C)(C)C1(O)OC1(C)C",
+            "FCCC(O)"
+        ],
         "image_path": "reaction_images\\reaction_1.png"
     },
     {
         "reaction_name": "2_Epoxide_and_Thiol",
+        "smirks": "[CR1;H2,H1X4,H0X4:1]1O[CR1;H2,H1X4,H0X4:2]1.[#6&$([CR0,R1X3,R1X4])&!$([#6](=,-[OR0,SR0])[SR0]):3]-[SR0;H1,-]>>O[C:1][C:2]S-[#6:3]",
+        "reactants": [
+            "CC(C)(C)C1(O)OC1(C)C",
+            "O=C([O-])OC(=O)CCS"
+        ],
         "image_path": "reaction_images\\reaction_2.png"
     },
     {
         "reaction_name": "3_Alkene_Oxidized_To_Epoxide",
+        "smirks": "[CR0;X3,X2H1,X1H2:1]=[CR0;X3,X2H1,X1H2:2]>>[C:1]1O[C:2]1",
+        "reactants": [
+            "BrC(O)=C(C)NC"
+        ],
         "image_path": "reaction_images\\reaction_3.png"
     },
     {
         "reaction_name": "4_Sulfonyl_Azide_and_Thio_Acid",
+        "smirks": "[*:1]S(=O)(=O)-[$(N=[N+]=[N-]),$([N-][N+]#N)].[C:2]-[$([CX3R0]([S;H1,X1])=[OX1]),$([CX3R0]([O;H1,X1])=[SX1])]>>[*:1]S(=O)(=O)N-C([C:2])=O",
+        "reactants": [
+            "C=CCS(=O)(=O)N=[N+]=[N-]",
+            "O=C(S)C(O)CC1CNNN1"
+        ],
         "image_path": "reaction_images\\reaction_4.png"
     },
     {
         "reaction_name": "5_Alkyne_and_Azide",
+        "smirks": "[CR0;X2,X1H1:2]#[CR0;X2,X1H1:3].[*;#6:1]-[$(N=[N+]=[N-]),$([N-][N+]#N)]>>[*;#6:1]N-1-N=N-C([*:2])=[*:3]1",
+        "reactants": [
+            "BrC#CCOC(=O)Cl",
+            "[N-]=[N+]=NCC1CCCCO1"
+        ],
         "image_path": "reaction_images\\reaction_5.png"
     },
     {
         "reaction_name": "6_Alcohol_To_Azide",
+        "smirks": "[#6&$([CR0,R1X3,R1X4])&!$([#6](=,-[OR0,SR0])[OR0]):1]-[OR0;H1,-]>>[N-]=[N+]=N-[#6&$([CR0,R1X3,R1X4])&!$([#6](=,-[OR0,SR0])[OR0]):1]",
+        "reactants": [
+            "FCCC(O)"
+        ],
         "image_path": "reaction_images\\reaction_6.png"
     },
     {
         "reaction_name": "7_Alcohol_To_Cyanide",
+        "smirks": "[#6&$([CR0,R1X3,R1X4])&!$([#6](=,-[OR0,SR0])[OR0]):1]-[OR0;H1,-]>>N#C-[#6&$([CR0,R1X3,R1X4])&!$([#6](=,-[OR0,SR0])[OR0]):1]",
+        "reactants": [
+            "FCCC(O)"
+        ],
         "image_path": "reaction_images\\reaction_7.png"
     },
     {
         "reaction_name": "8_Primary_Amine_Oxidized_To_an_Azide",
+        "smirks": "[#7;$([H3+]),$([H2R0;!+])]-[#6:1]>>[#6:1]N=[N+]=[N-]",
+        "reactants": [
+            "NC(=O)O"
+        ],
         "image_path": "reaction_images\\reaction_8.png"
     },
     {
         "reaction_name": "9_Primary_Amine_Oxidized_To_an_Isocyanate",
+        "smirks": "[#7;$([H3+]),$([H2R0;!+])]-[#6:1]>>[#6:1]N=C=O",
+        "reactants": [
+            "NC(=O)O"
+        ],
         "image_path": "reaction_images\\reaction_9.png"
     },
     {
         "reaction_name": "10_Primary_Amine_Oxidized_To_an_Isothiocyanate",
+        "smirks": "[#7;$([H3+]),$([H2R0;!+])]-[#6:1]>>[#6:1]N=C=S",
+        "reactants": [
+            "NC(=O)O"
+        ],
         "image_path": "reaction_images\\reaction_10.png"
     },
     {
         "reaction_name": "11_Azide_Reduced_To_Amine",
+        "smirks": "[*;#6:1]-[$(N=[N+]=[N-]),$([N-][N+]#N)]>>[NH2][*;#6:1]",
+        "reactants": [
+            "[N-]=[N+]=NCC1CCCCO1"
+        ],
         "image_path": "reaction_images\\reaction_11.png"
     },
     {
         "reaction_name": "12_Carbonochloridate_and_Amine",
+        "smirks": "Cl[C;X3](=O)-O[*:1].[#7;$([#7;H3+,H2R0X1]-[#6]),$([#7&!H3;H1R1X3](:,-[#6R1]):,-[#6R1,#7R1]),$([#7&!H3;H2]-[#6]),$([#7&!H3;H0R1X2](:,-[#6R1;X3H1]):,-[#6R1X3H1]),$([#7&!H3;H0R1X2](:,-[#6R1;X3]):,-[#7R1X3]),$([#7&!H3;H1R0X3](-[#6])-[#6R0]):2]>>[*:1]O-C(=O)-[#7+0:2]",
+        "reactants": [
+            "O=C(Cl)OC(=O)Cl",
+            "O=C1CNC(=O)O1"
+        ],
         "image_path": "reaction_images\\reaction_12.png"
     },
     {
         "reaction_name": "13_Carboxylate_and_Amine",
+        "smirks": "[*;!O:1]-[$([CR0;X3](=[OR0&D1])[OR0&H1]),$([CR0;X3](=[OR0&D1])[OR0-])].[#7;$([#7;H3+,H2R0X1]-[#6]),$([#7&!H3;H1R1X3](:,-[#6R1]):,-[#6R1,#7R1]),$([#7&!H3;H2]-[#6]),$([#7&!H3;H0R1X2](:,-[#6R1;X3H1]):,-[#6R1X3H1]),$([#7&!H3;H0R1X2](:,-[#6R1;X3]):,-[#7R1X3]),$([#7&!H3;H1R0X3](-[#6])-[#6R0]):2]>>[*;!O:1]C(=O)-[#7+0:2]",
+        "reactants": [
+            "c1ccccc1CC(=O)O",
+            "O=C1CNC(=O)O1"
+        ],
         "image_path": "reaction_images\\reaction_13.png"
     },
     {
         "reaction_name": "14_Carboxylate_and_Alcohol",
+        "smirks": "[*;!O:1]-[$([CR0;X3](=[OR0&D1])[OR0&H1]),$([CR0;X3](=[OR0&D1])[OR0-])].[#6&$([CR0,R1X3,R1X4])&!$([#6](=,-[OR0,SR0])[OR0]):2]-[OR0;H1,-]>>[*;!O:1]C(=O)-O[#6:2]",
+        "reactants": [
+            "c1ccccc1CC(=O)O",
+            "FCCC(O)"
+        ],
         "image_path": "reaction_images\\reaction_14.png"
     },
     {
         "reaction_name": "15_Carboxylate_and_Thiol",
+        "smirks": "[*;!O:1]-[$([CR0;X3](=[OR0&D1])[OR0&H1]),$([CR0;X3](=[OR0&D1])[OR0-])].[#6&$([CR0,R1X3,R1X4])&!$([#6](=,-[OR0,SR0])[SR0]):2]-[SR0;H1,-]>>[*;!O:1]C(=O)-S[#6:2]",
+        "reactants": [
+            "c1ccccc1CC(=O)O",
+            "O=C([O-])OC(=O)CCS"
+        ],
         "image_path": "reaction_images\\reaction_15.png"
     },
     {
         "reaction_name": "16_Carboxylate_To_Cyanide",
+        "smirks": "[*;!O:1]-[$([CR0;X3](=[OR0&D1])[OR0&H1]),$([CR0;X3](=[OR0&D1])[OR0-])]>>[*;!O:1]C(=O)C#N",
+        "reactants": [
+            "c1ccccc1CC(=O)O"
+        ],
         "image_path": "reaction_images\\reaction_16.png"
     },
     {
         "reaction_name": "17_Carboxylate_To_Azide",
+        "smirks": "[*;!O:1]-[$([CR0;X3](=[OR0&D1])[OR0&H1]),$([CR0;X3](=[OR0&D1])[OR0-])]>>[*;!O:1]C(=O)-N=[N+]=[N-]",
+        "reactants": [
+            "c1ccccc1CC(=O)O"
+        ],
         "image_path": "reaction_images\\reaction_17.png"
     },
     {
         "reaction_name": "18_Halide_and_Amine",
+        "smirks": "[Cl,Br,I][$([CX4,c]),$([#6X3]=[O,S]):1].[#7;$([#7;H3+,H2R0X1]-[#6]),$([#7&!H3;H1R1X3](:,-[#6R1]):,-[#6R1,#7R1]),$([#7&!H3;H2]-[#6]),$([#7&!H3;H0R1X2](:,-[#6R1;X3H1]):,-[#6R1X3H1]),$([#7&!H3;H0R1X2](:,-[#6R1;X3]):,-[#7R1X3]),$([#7&!H3;H1R0X3](-[#6])-[#6R0]):2]>>[#6:1]-[#7+0:2]",
+        "reactants": [
+            "O=C(C)CC(=O)Cl",
+            "O=C1CNC(=O)O1"
+        ],
         "image_path": "reaction_images\\reaction_18.png"
     },
     {
         "reaction_name": "19_Halide_and_Alcohol",
+        "smirks": "[Cl,Br,I][$([CX4,c]),$([#6X3]=[O,S]):1].[#6&$([CR0,R1X3,R1X4])&!$([#6](=,-[OR0,SR0])[OR0]):2]-[OR0;H1,-]>>[#6:1]-O-[#6:2]",
+        "reactants": [
+            "O=C(C)CC(=O)Cl",
+            "FCCC(O)"
+        ],
         "image_path": "reaction_images\\reaction_19.png"
     },
     {
         "reaction_name": "20_Halide_and_Thiol",
+        "smirks": "[Cl,Br,I][$([CX4,c]),$([#6X3]=[O,S]):1].[#6&$([CR0,R1X3,R1X4])&!$([#6](=,-[OR0,SR0])[SR0]):2]-[SR0;H1,-]>>[#6:1]-S-[#6:2]",
+        "reactants": [
+            "O=C(C)CC(=O)Cl",
+            "O=C([O-])OC(=O)CCS"
+        ],
         "image_path": "reaction_images\\reaction_20.png"
     },
     {
         "reaction_name": "21_Halide_To_Cyanide",
+        "smirks": "[Cl,Br,I][$([CX4,c]),$([#6X3]=[O,S]):1]>>[#6:1]C#N",
+        "reactants": [
+            "O=C(C)CC(=O)Cl"
+        ],
         "image_path": "reaction_images\\reaction_21.png"
     },
     {
         "reaction_name": "22_Halide_To_Azide",
+        "smirks": "[Cl,Br,I][$([CX4,c]),$([#6X3]=[O,S]):1]>>[#6:1]-N=[N+]=[N-]",
+        "reactants": [
+            "O=C(C)CC(=O)Cl"
+        ],
         "image_path": "reaction_images\\reaction_22.png"
     },
     {
         "reaction_name": "23_Ester_and_Amine",
+        "smirks": "[*;#6:1]C(=O)-O[*:4].[#7;$([#7;H3+,H2R0X1]-[#6]),$([#7&!H3;H1R1X3](:,-[#6R1]):,-[#6R1,#7R1]),$([#7&!H3;H2]-[#6]),$([#7&!H3;H0R1X2](:,-[#6R1;X3H1]):,-[#6R1X3H1]),$([#7&!H3;H0R1X2](:,-[#6R1;X3]):,-[#7R1X3]),$([#7&!H3;H1R0X3](-[#6])-[#6R0]):2]>>[*;#6:1]C(=O)-[#7+0:2]",
+        "reactants": [
+            "C1CCNC(C(=O)-OCC)1",
+            "O=C1CNC(=O)O1"
+        ],
         "image_path": "reaction_images\\reaction_23.png"
     },
     {
         "reaction_name": "24_Ester_and_Alcohol",
+        "smirks": "[*;#6:1]C(=O)-O[*:3].[#6&$([CR0,R1X3,R1X4])&!$([#6](=,-[OR0,SR0])[OR0]):2]-[OR0;H1,-]>>[*;#6:1]C(=O)-O[#6&$([CR0,R1X3,R1X4])&!$([#6](=,-[OR0,SR0])[OR0]):2]",
+        "reactants": [
+            "C1CCNC(C(=O)-OCC)1",
+            "FCCC(O)"
+        ],
         "image_path": "reaction_images\\reaction_24.png"
     },
     {
         "reaction_name": "25_Ester_and_Thiol",
+        "smirks": "[*;#6:1]C(=O)-O[*:3].[#6&$([CR0,R1X3,R1X4])&!$([#6](=,-[OR0,SR0])[SR0]):2]-[SR0;H1,-]>>[*;#6:1]C(=O)-S[CR0&$([#6])&!$([#6]=O):2]",
+        "reactants": [
+            "C1CCNC(C(=O)-OCC)1",
+            "O=C([O-])OC(=O)CCS"
+        ],
         "image_path": "reaction_images\\reaction_25.png"
     },
     {
         "reaction_name": "26_Acid_Anhydride_Noncyclic_and_Amine",
+        "smirks": "[*:1]C(=O)-[O;R0]-C(=O)[*:4].[#7;$([#7;H3+,H2R0X1]-[#6]),$([#7&!H3;H1R1X3](:,-[#6R1]):,-[#6R1,#7R1]),$([#7&!H3;H2]-[#6]),$([#7&!H3;H0R1X2](:,-[#6R1;X3H1]):,-[#6R1X3H1]),$([#7&!H3;H0R1X2](:,-[#6R1;X3]):,-[#7R1X3]),$([#7&!H3;H1R0X3](-[#6])-[#6R0]):2]>>[*:1]C(=O)-[#7+0:2]",
+        "reactants": [
+            "C1CCC(CC1)C(=O)OC(=O)C2CCCCC2",
+            "O=C1CNC(=O)O1"
+        ],
         "image_path": "reaction_images\\reaction_26.png"
     },
     {
         "reaction_name": "27_Acid_Anhydride_Noncyclic_and_Alcohol",
+        "smirks": "[*:1]C(=O)-[O;R0]-C(=O)[*:3].[#6&$([CR0,R1X3,R1X4])&!$([#6](=,-[OR0,SR0])[OR0]):2]-[OR0;H1,-]>>[*:1]C(=O)-O[#6&$([CR0,R1X3,R1X4])&!$([#6](=,-[OR0,SR0])[OR0]):2]",
+        "reactants": [
+            "C1CCC(CC1)C(=O)OC(=O)C2CCCCC2",
+            "FCCC(O)"
+        ],
         "image_path": "reaction_images\\reaction_27.png"
     },
     {
         "reaction_name": "28_Acid_Anhydride_Noncyclic_and_Thiol",
+        "smirks": "[*:1]C(=O)-[O;R0]-C(=O)[*:3].[#6&$([CR0,R1X3,R1X4])&!$([#6](=,-[OR0,SR0])[SR0]):2]-[SR0;H1,-]>>[*:1]C(=O)-S[#6&$([CR0,R1X3,R1X4])&!$([#6](=,-[OR0,SR0])[SR0]):2]",
+        "reactants": [
+            "C1CCC(CC1)C(=O)OC(=O)C2CCCCC2",
+            "O=C([O-])OC(=O)CCS"
+        ],
         "image_path": "reaction_images\\reaction_28.png"
     },
     {
         "reaction_name": "29_Acid_Anhydride_Noncyclic_To_Cyanide",
+        "smirks": "[*:1]C(=O)-[O;R0]-C(=O)[*:2]>>[*:1]C(=O)C#N",
+        "reactants": [
+            "C1CCC(CC1)C(=O)OC(=O)C2CCCCC2"
+        ],
         "image_path": "reaction_images\\reaction_29.png"
     },
     {
         "reaction_name": "30_Acid_Anhydride_Noncyclic_To_Azide",
+        "smirks": "[*:1]C(=O)-[O;R0]-C(=O)[*:2]>>[*:1]C(=O)-N=[N+]=[N-]",
+        "reactants": [
+            "C1CCC(CC1)C(=O)OC(=O)C2CCCCC2"
+        ],
         "image_path": "reaction_images\\reaction_30.png"
     },
     {
         "reaction_name": "31_Isocyanate_and_Amine",
+        "smirks": "[#6:1]N=C=O.[#7;$([#7;H3+,H2R0X1]-[#6]),$([#7&!H3;H1R1X3](:,-[#6R1]):,-[#6R1,#7R1]),$([#7&!H3;H2]-[#6]),$([#7&!H3;H0R1X2](:,-[#6R1;X3H1]):,-[#6R1X3H1]),$([#7&!H3;H0R1X2](:,-[#6R1;X3]):,-[#7R1X3]),$([#7&!H3;H1R0X3](-[#6])-[#6R0]):2]>>[#6:1]N-C(=O)-[#7+0:2]",
+        "reactants": [
+            "O=C=NC(=O)Cl",
+            "O=C1CNC(=O)O1"
+        ],
         "image_path": "reaction_images\\reaction_31.png"
     },
     {
         "reaction_name": "32_Isothiocyanate_and_Amine",
+        "smirks": "[#6:1]N=C=S.[#7;$([#7;H3+,H2R0X1]-[#6]),$([#7&!H3;H1R1X3](:,-[#6R1]):,-[#6R1,#7R1]),$([#7&!H3;H2]-[#6]),$([#7&!H3;H0R1X2](:,-[#6R1;X3H1]):,-[#6R1X3H1]),$([#7&!H3;H0R1X2](:,-[#6R1;X3]):,-[#7R1X3]),$([#7&!H3;H1R0X3](-[#6])-[#6R0]):2]>>[#6:1]N-C(=S)-[#7+0:2]",
+        "reactants": [
+            "O=C(Cl)CCN=C=S",
+            "O=C1CNC(=O)O1"
+        ],
         "image_path": "reaction_images\\reaction_32.png"
     },
     {
         "reaction_name": "33_Isocyanate_and_Thiol",
+        "smirks": "[#6:1]N=C=O.[#6&$([CR0,R1X3,R1X4])&!$([#6](=,-[OR0,SR0])[SR0]):2]-[SR0;H1,-]>>[#6:1]N-C(=O)-S[#6:2]",
+        "reactants": [
+            "O=C=NC(=O)Cl",
+            "O=C([O-])OC(=O)CCS"
+        ],
         "image_path": "reaction_images\\reaction_33.png"
     },
     {
         "reaction_name": "34_Isothiocyanate_and_Thiol",
+        "smirks": "[#6:1]N=C=S.[#6&$([CR0,R1X3,R1X4])&!$([#6](=,-[OR0,SR0])[SR0]):2]-[SR0;H1,-]>>[#6:1]N-C(=S)-S[#6:2]",
+        "reactants": [
+            "O=C(Cl)CCN=C=S",
+            "O=C([O-])OC(=O)CCS"
+        ],
         "image_path": "reaction_images\\reaction_34.png"
     },
     {
         "reaction_name": "35_Isocyanate_and_Alcohol",
+        "smirks": "[#6:1]N=C=O.[#6&$([CR0,R1X3,R1X4])&!$([#6](=,-[OR0,SR0])[OR0]):2]-[OR0;H1,-]>>[#6:1]N-C(=O)-O[#6:2]",
+        "reactants": [
+            "O=C=NC(=O)Cl",
+            "FCCC(O)"
+        ],
         "image_path": "reaction_images\\reaction_35.png"
     },
     {
         "reaction_name": "36_Isothiocyanate_and_Alcohol",
+        "smirks": "[#6:1]N=C=S.[#6&$([CR0,R1X3,R1X4])&!$([#6](=,-[OR0,SR0])[OR0]):2]-[OR0;H1,-]>>[#6:1]N-C(=S)-O[#6:2]",
+        "reactants": [
+            "O=C(Cl)CCN=C=S",
+            "FCCC(O)"
+        ],
         "image_path": "reaction_images\\reaction_36.png"
     },
     {
         "reaction_name": "37_Pictet_Spengler",
+        "smirks": "[cH1:1]1:[c:2](-[CH2:7]-[CH2:8]-[NH2:9]):[c:3]:[c:4]:[c:5]:[c:6]:1.[#6:11]-[CH1;R0:10]=[OD1]>>[c:1]12:[c:2](-[CH2:7]-[CH2:8]-[NH1:9]-[C:10]-2(-[#6:11])):[c:3]:[c:4]:[c:5]:[c:6]:1",
+        "reactants": [
+            "c1cc(CCN)ccc1",
+            "CC(=O)"
+        ],
         "image_path": "reaction_images\\reaction_37.png"
     },
     {
         "reaction_name": "38_benzimidazole_derivatives_carboxylic_acid_ester",
+        "smirks": "[c;r6:1](-[NH1;$(N-[#6]):2]):[c;r6:3](-[NH2:4]).[#6:6]-[C;R0:5](=[OD1])-[#8;H1,$(O-[CH3])]>>[c:3]2:[c:1]:[n:2]:[c:5](-[#6:6]):[n:4]@2",
+        "reactants": [
+            "c1c(NC)c(N)ccc1",
+            "OC(=O)C"
+        ],
         "image_path": "reaction_images\\reaction_38.png"
     },
     {
         "reaction_name": "39_benzimidazole_derivatives_aldehyde",
+        "smirks": "[c;r6:1](-[NH1;$(N-[#6]):2]):[c;r6:3](-[NH2:4]).[#6:6]-[CH1;R0:5](=[OD1])>>[c:3]2:[c:1]:[n:2]:[c:5](-[#6:6]):[n:4]@2",
+        "reactants": [
+            "c1c(NC)c(N)ccc1",
+            "CC(=O)"
+        ],
         "image_path": "reaction_images\\reaction_39.png"
     },
     {
         "reaction_name": "40_benzothiazole",
+        "smirks": "[c;r6:1](-[SH1:2]):[c;r6:3](-[NH2:4]).[#6:6]-[CH1;R0:5](=[OD1])>>[c:3]2:[c:1]:[s:2]:[c:5](-[#6:6]):[n:4]@2",
+        "reactants": [
+            "c1c(S)c(N)ccc1",
+            "CC(=O)"
+        ],
         "image_path": "reaction_images\\reaction_40.png"
     },
     {
         "reaction_name": "41_benzoxazole_arom_aldehyde",
+        "smirks": "[c:1](-[OH1;$(Oc1ccccc1):2]):[c;r6:3](-[NH2:4]).[c:6]-[CH1;R0:5](=[OD1])>>[c:3]2:[c:1]:[o:2]:[c:5](-[c:6]):[n:4]@2",
+        "reactants": [
+            "c1cc(O)c(N)cc1",
+            "c1ccccc1C(=O)"
+        ],
         "image_path": "reaction_images\\reaction_41.png"
     },
     {
         "reaction_name": "42_benzoxazole_carboxylic_acid",
+        "smirks": "[c;r6:1](-[OH1:2]):[c;r6:3](-[NH2:4]).[#6:6]-[C;R0:5](=[OD1])-[OH1]>>[c:3]2:[c:1]:[o:2]:[c:5](-[#6:6]):[n:4]@2",
+        "reactants": [
+            "c1cc(O)c(N)cc1",
+            "CC(=O)O"
+        ],
         "image_path": "reaction_images\\reaction_42.png"
     },
     {
         "reaction_name": "43_thiazole",
+        "smirks": "[#6:6]-[C;R0:1](=[OD1])-[CH1;R0:5](-[#6:7])-[*;#17,#35,#53].[$([N&H2:2]-[C:3]([*:6])=[S&D1,O&D1:4]),$([N&H1:2]=[C:3]([*:6])-[SH1,OH1:4])]>>[c:1]2(-[#6:6]):[n:2]:[c:3]([*:6]):[s:4][c:5]([#6:7]):2",
+        "reactants": [
+            "CC(=O)C(I)C",
+            "NC(=S)C"
+        ],
         "image_path": "reaction_images\\reaction_43.png"
     },
     {
         "reaction_name": "44_Niementowski_quinazoline",
+        "smirks": "[c:1](-[C;$(C-c1ccccc1):2](=[OD1:3])-[OH1]):[c:4](-[NH2:5]).[N;!H0;!$(N-N);!$(N-C=N);!$(N(-C=O)-C=O):6]-[C;H1,$(C-[#6]):7]=[OD1]>>[c:4]2:[c:1]-[C:2](=[O:3])-[N:6]-[C:7]=[N:5]-2",
+        "reactants": [
+            "c1c(C(=O)O)c(N)ccc1",
+            "C(=O)N"
+        ],
         "image_path": "reaction_images\\reaction_44.png"
     },
     {
         "reaction_name": "45_tetrazole_terminal",
+        "smirks": "[CH0;$(C-[#6]):1]#[NH0:2]>>[C:1]1=[N:2]-N-N=N-1",
+        "reactants": [
+            "CC#N"
+        ],
         "image_path": "reaction_images\\reaction_45.png"
     },
     {
         "reaction_name": "46_tetrazole_connect_regioisomere_1",
+        "smirks": "[CH0;$(C-[#6]):1]#[NH0:2].[C;A;!$(C=O):3]-[*;#17,#35,#53]>>[C:1]1=[N:2]-N(-[C:3])-N=N-1",
+        "reactants": [
+            "CC#N",
+            "CBr"
+        ],
         "image_path": "reaction_images\\reaction_46.png"
     },
     {
         "reaction_name": "47_tetrazole_connect_regioisomere_2",
+        "smirks": "[CH0;$(C-[#6]):1]#[NH0:2].[C;A;!$(C=O):3]-[*;#17,#35,#53]>>[C:1]1=[N:2]-N=N-N-1(-[C:3])",
+        "reactants": [
+            "CC#N",
+            "CBr"
+        ],
         "image_path": "reaction_images\\reaction_47.png"
     },
     {
         "reaction_name": "48_Huisgen_Cu_catalyzed_1_4_subst",
+        "smirks": "[CH0;$(C-[#6]):1]#[CH1:2].[C;H1,H2;A;!$(C=O):3]-[*;#17,#35,#53,OH1]>>[C:1]1=[C:2]-N(-[C:3])-N=N-1",
+        "reactants": [
+            "CC#C",
+            "CCBr"
+        ],
         "image_path": "reaction_images\\reaction_48.png"
     },
     {
         "reaction_name": "49_Huisgen_Ru_catalyzed_1_5_subst",
+        "smirks": "[CH0;$(C-[#6]):1]#[CH1:2].[C;H1,H2;A;!$(C=O):3]-[*;#17,#35,#53,OH1]>>[C:1]1=[C:2]-N=NN(-[C:3])-1",
+        "reactants": [
+            "CC#C",
+            "CCBr"
+        ],
         "image_path": "reaction_images\\reaction_49.png"
     },
     {
         "reaction_name": "50_Huisgen_disubst_alkyne",
+        "smirks": "[CH0;$(C-[#6]):1]#[CH0;$(C-[#6]):2].[C;H1,H2;A;!$(C=O):3]-[*;#17,#35,#53,OH1]>>[C:1]1=[C:2]-N=NN(-[C:3])-1",
+        "reactants": [
+            "CC#CC",
+            "CCBr"
+        ],
         "image_path": "reaction_images\\reaction_50.png"
     },
     {
         "reaction_name": "51_1_2_4_triazole_acetohydrazide",
+        "smirks": "[CH0;$(C-[#6]):1]#[NH0:2].[NH2:3]-[NH1:4]-[CH0;$(C-[#6]);R0:5]=[OD1]>>[N:2]1-[C:1]=[N:3]-[N:4]-[C:5]=1",
+        "reactants": [
+            "CC#N",
+            "NNC(=O)C"
+        ],
         "image_path": "reaction_images\\reaction_51.png"
     },
     {
         "reaction_name": "52_1_2_4_triazole_carboxylic_acid_ester",
+        "smirks": "[CH0;$(C-[#6]):1]#[NH0:2].[CH0;$(C-[#6]);R0:5](=[OD1])-[#8;H1,$(O-[CH3]),$(O-[CH2]-[CH3])]>>[N:2]1-[C:1]=N-N-[C:5]=1",
+        "reactants": [
+            "CC#N",
+            "OC(=O)C"
+        ],
         "image_path": "reaction_images\\reaction_52.png"
     },
     {
         "reaction_name": "53_3_nitrile_pyridine",
+        "smirks": "[#6;!$([#6](-C=O)-C=O):4]-[CH0:1](=[OD1])-[C;H1&!$(C-[*;!#6])&!$(C-C(=O)O),H2:2]-[CH0;R0:3](=[OD1])-[#6;!$([#6](-C=O)-C=O):5]>>[c:1]1(-[#6:4]):[c:2]:[c:3](-[#6:5]):n:c(-O):c(-C#N):1",
+        "reactants": [
+            "CC(=O)CC(=O)C"
+        ],
         "image_path": "reaction_images\\reaction_53.png"
     },
     {
         "reaction_name": "54_spiro_chromanone",
+        "smirks": "[c:1](-[C;$(C-c1ccccc1):2](=[OD1:3])-[CH3:4]):[c:5](-[OH1:6]).[C;$(C1-[CH2]-[CH2]-[N,C]-[CH2]-[CH2]-1):7](=[OD1])>>[O:6]1-[c:5]:[c:1]-[C:2](=[OD1:3])-[C:4]-[C:7]-1",
+        "reactants": [
+            "c1cc(C(=O)C)c(O)cc1",
+            "C1(=O)CCNCC1"
+        ],
         "image_path": "reaction_images\\reaction_54.png"
     },
     {
         "reaction_name": "55_pyrazole",
+        "smirks": "[#6;!$([#6](-C=O)-C=O):4]-[CH0:1](=[OD1])-[C;H1&!$(C-[*;!#6])&!$(C-C(=O)O),H2:2]-[CH0;R0:3](=[OD1])-[#6;!$([#6](-C=O)-C=O):5].[NH2:6]-[N;!H0;$(N-[#6]),H2:7]>>[C:1]1(-[#6:4])-[C:2]=[C:3](-[#6:5])-[N:7]-[N:6]=1",
+        "reactants": [
+            "CC(=O)CC(=O)C",
+            "NNC"
+        ],
         "image_path": "reaction_images\\reaction_55.png"
     },
     {
         "reaction_name": "56_phthalazinone",
+        "smirks": "[c;r6:1](-[C;$(C=O):6]-[OH1]):[c;r6:2]-[C;H1,$(C-C):3]=[OD1].[NH2:4]-[NH1;$(N-[#6]);!$(NC=[O,S,N]):5]>>[c:1]1:[c:2]-[C:3]=[N:4]-[N:5]-[C:6]-1",
+        "reactants": [
+            "c1cc(C(=O)O)c(C(=O)C)cc1",
+            "NNC"
+        ],
         "image_path": "reaction_images\\reaction_56.png"
     },
     {
         "reaction_name": "57_Paal_Knorr_pyrrole",
+        "smirks": "[#6:5]-[C;R0:1](=[OD1])-[C;H1,H2:2]-[C;H1,H2:3]-[C:4](=[OD1])-[#6:6].[NH2;$(N-[C,N]);!$(NC=[O,S,N]);!$(N([#6])[#6]);!$(N~N~N):7]>>[C:1]1(-[#6:5])=[C:2]-[C:3]=[C:4](-[#6:6])-[N:7]-1",
+        "reactants": [
+            "CC(=O)CCC(=O)C",
+            "NC"
+        ],
         "image_path": "reaction_images\\reaction_57.png"
     },
     {
         "reaction_name": "58_triaryl_imidazole",
+        "smirks": "[C;$(C-c1ccccc1):1](=[OD1])-[C;D3;$(C-c1ccccc1):2]~[O;D1,H1].[CH1;$(C-c):3]=[OD1]>>[C:1]1-N=[C:3]-[NH1]-[C:2]=1",
+        "reactants": [
+            "c1ccccc1C(=O)C(=O)c1ccccc1",
+            "c1ccccc1C(=O)"
+        ],
         "image_path": "reaction_images\\reaction_58.png"
     },
     {
         "reaction_name": "59_Fischer_indole",
+        "smirks": "[NH1;$(N-c1ccccc1):1](-[NH2])-[c:5]:[cH1:4].[C;$(C([#6])[#6]):2](=[OD1])-[CH2;$(C([#6])[#6]);!$(C(C=O)C=O):3]>>[C:5]1-[N:1]-[C:2]=[C:3]-[C:4]:1",
+        "reactants": [
+            "c1ccccc1NN",
+            "CCC(=O)C"
+        ],
         "image_path": "reaction_images\\reaction_59.png"
     },
     {
         "reaction_name": "60_Friedlaender_chinoline",
+        "smirks": "[NH2;$(N-c1ccccc1):1]-[c:2]:[c:3]-[CH1:4]=[OD1].[C;$(C([#6])[#6]):6](=[OD1])-[CH2;$(C([#6])[#6]);!$(C(C=O)C=O):5]>>[N:1]1-[c:2]:[c:3]-[C:4]=[C:5]-[C:6]:1",
+        "reactants": [
+            "c1cccc(C=O)c1N",
+            "CCC(=O)C"
+        ],
         "image_path": "reaction_images\\reaction_60.png"
     },
     {
         "reaction_name": "61_benzofuran",
+        "smirks": "[*;Br,I;$(*c1ccccc1)]-[c:1]:[c:2]-[OH1:3].[CH1:5]#[C;$(C-[#6]):4]>>[c:1]1:[c:2]-[O:3]-[C:4]=[C:5]-1",
+        "reactants": [
+            "c1cc(I)c(O)cc1",
+            "CC#C"
+        ],
         "image_path": "reaction_images\\reaction_61.png"
     },
     {
         "reaction_name": "62_benzothiophene",
+        "smirks": "[*;Br,I;$(*c1ccccc1)]-[c:1]:[c:2]-[SD2:3]-[CH3].[CH1:5]#[C;$(C-[#6]):4]>>[c:1]1:[c:2]-[S:3]-[C:4]=[C:5]-1",
+        "reactants": [
+            "c1cc(I)c(SC)cc1",
+            "CC#C"
+        ],
         "image_path": "reaction_images\\reaction_62.png"
     },
     {
         "reaction_name": "63_indole",
+        "smirks": "[*;Br,I;$(*c1ccccc1)]-[c:1]:[c:2]-[NH2:3].[CH1:5]#[C;$(C-[#6]):4]>>[c:1]1:[c:2]-[N:3]-[C:4]=[C:5]-1",
+        "reactants": [
+            "c1cc(I)c(N)cc1",
+            "CC#C"
+        ],
         "image_path": "reaction_images\\reaction_63.png"
     },
     {
         "reaction_name": "64_oxadiazole",
+        "smirks": "[#6:6][C:5]#[#7;D1:4].[#6:1][C:2](=[OD1:3])[OH1]>>[#6:6][c:5]1[n:4][o:3][c:2]([#6:1])n1",
+        "reactants": [
+            "CC#N",
+            "CC(=O)O"
+        ],
         "image_path": "reaction_images\\reaction_64.png"
     },
     {
         "reaction_name": "65_Williamson_ether",
+        "smirks": "[#6;$([#6]~[#6]);!$([#6]=O):2][#8;H1:3].[Cl,Br,I][#6;H2;$([#6]~[#6]):4]>>[CH2:4][O:3][#6:2]",
+        "reactants": [
+            "CCO",
+            "CCBr"
+        ],
         "image_path": "reaction_images\\reaction_65.png"
     },
     {
         "reaction_name": "66_reductive_amination",
+        "smirks": "[#6:4]-[C;H1,$([CH0](-[#6])[#6]):1]=[OD1].[N;H2,$([NH1;D2](C)C);!$(N-[#6]=[*]):3]-[C:5]>>[#6:4][C:1]-[N:3]-[C:5]",
+        "reactants": [
+            "CC(=O)",
+            "NC"
+        ],
         "image_path": "reaction_images\\reaction_66.png"
     },
     {
         "reaction_name": "67_Suzuki",
+        "smirks": "[#6;H0;D3;$([#6](~[#6])~[#6]):1]B(O)O.[#6;H0;D3;$([#6](~[#6])~[#6]):2][Cl,Br,I]>>[#6:2][#6:1]",
+        "reactants": [
+            "c1ccccc1B(O)O",
+            "c1ccccc1Br"
+        ],
         "image_path": "reaction_images\\reaction_67.png"
     },
     {
         "reaction_name": "68_piperidine_indole",
+        "smirks": "[c;H1:3]1:[c:4]:[c:5]:[c;H1:6]:[c:7]2:[nH:8]:[c:9]:[c;H1:1]:[c:2]:1:2.O=[C:10]1[#6;H2:11][#6;H2:12][N][#6;H2][#6;H2]1>>[#6;H2:12]3[#6;H1:11]=[C:10]([c:1]1:[c:9]:[n:8]:[c:7]2:[c:6]:[c:5]:[c:4]:[c:3]:[c:2]:1:2)[#6;H2:15][#6;H2:14][N:13]3",
+        "reactants": [
+            "c1cccc2c1C=CN2",
+            "C1CC(=O)CCN1"
+        ],
         "image_path": "reaction_images\\reaction_68.png"
     },
     {
         "reaction_name": "69_Negishi",
+        "smirks": "[#6;$([#6]~[#6]);!$([#6]~[S,N,O,P]):1][Cl,Br,I].[Cl,Br,I][#6;$([#6]~[#6]);!$([#6]~[S,N,O,P]):2]>>[#6:2][#6:1]",
+        "reactants": [
+            "CCBr",
+            "CCBr"
+        ],
         "image_path": "reaction_images\\reaction_69.png"
     },
     {
         "reaction_name": "70_Mitsunobu_imide",
+        "smirks": "[C;H1&$(C([#6])[#6]),H2&$(C[#6]):1][OH1].[NH1;$(N(C=O)C=O):2]>>[C:1][N:2]",
+        "reactants": [
+            "CC(O)C",
+            "CC(=O)NC(=O)C"
+        ],
         "image_path": "reaction_images\\reaction_70.png"
     },
     {
         "reaction_name": "71_Mitsunobu_phenole",
+        "smirks": "[C;H1&$(C([#6])[#6]),H2&$(C[#6]):1][OH1].[OH1;$(Oc1ccccc1):2]>>[C:1][O:2]",
+        "reactants": [
+            "CC(O)C",
+            "c1ccccc1O"
+        ],
         "image_path": "reaction_images\\reaction_71.png"
     },
     {
         "reaction_name": "72_Mitsunobu_sulfonamide",
+        "smirks": "[C;H1&$(C([#6])[#6]),H2&$(C[#6]):1][OH1].[NH1;$(N([#6])S(=O)=O):2]>>[C:1][N:2]",
+        "reactants": [
+            "CC(O)C",
+            "CNS(=O)(=O)C"
+        ],
         "image_path": "reaction_images\\reaction_72.png"
     },
     {
         "reaction_name": "73_Mitsunobu_tetrazole_1",
+        "smirks": "[C;H1&$(C([#6])[#6]),H2&$(C[#6]):1][OH1].[#7H1:2]1~[#7:3]~[#7:4]~[#7:5]~[#6:6]~1>>[C:1][#7:2]1:[#7:3]:[#7:4]:[#7:5]:[#6:6]:1",
+        "reactants": [
+            "CC(O)C",
+            "N1=NNC=N1"
+        ],
         "image_path": "reaction_images\\reaction_73.png"
     },
     {
         "reaction_name": "74_Mitsunobu_tetrazole_2",
+        "smirks": "[C;H1&$(C([#6])[#6]),H2&$(C[#6]):1][OH1].[#7H1:2]1~[#7:3]~[#7:4]~[#7:5]~[#6:6]~1>>[#7H0:2]1:[#7:3]:[#7H0:4]([C:1]):[#7:5]:[#6:6]:1",
+        "reactants": [
+            "CC(O)C",
+            "N1=NNC=N1"
+        ],
         "image_path": "reaction_images\\reaction_74.png"
     },
     {
         "reaction_name": "75_Mitsunobu_tetrazole_3",
+        "smirks": "[C;H1&$(C([#6])[#6]),H2&$(C[#6]):1][OH1].[#7:2]1~[#7:3]~[#7H1:4]~[#7:5]~[#6:6]~1>>[C:1][#7H0:2]1:[#7:3]:[#7H0:4]:[#7:5]:[#6:6]:1",
+        "reactants": [
+            "CC(O)C",
+            "N1N=NC=N1"
+        ],
         "image_path": "reaction_images\\reaction_75.png"
     },
     {
         "reaction_name": "76_Mitsunobu_tetrazole_4",
+        "smirks": "[C;H1&$(C([#6])[#6]),H2&$(C[#6]):1][OH1].[#7:2]1~[#7:3]~[#7H1:4]~[#7:5]~[#6:6]~1>>[#7:2]1:[#7:3]:[#7:4]([C:1]):[#7:5]:[#6:6]:1",
+        "reactants": [
+            "CC(O)C",
+            "N1N=NC=N1"
+        ],
         "image_path": "reaction_images\\reaction_76.png"
     },
     {
         "reaction_name": "77_Heck_terminal_vinyl",
+        "smirks": "[#6;c,$(C(=O)O),$(C#N):3][#6;H1:2]=[#6;H2:1].[#6;$([#6]=[#6]),$(c:c):4][Cl,Br,I]>>[#6:4]/[#6:1]=[#6:2]/[#6:3]",
+        "reactants": [
+            "c1ccccc1C=C",
+            "c1ccccc1Br"
+        ],
         "image_path": "reaction_images\\reaction_77.png"
     },
     {
         "reaction_name": "78_Heck_non_terminal_vinyl",
+        "smirks": "[#6;c,$(C(=O)O),$(C#N):3][#6:2]([#6:5])=[#6;H1;$([#6][#6]):1].[#6;$([#6]=[#6]),$(c:c):4][Cl,Br,I]>>[#6:4][#6;H0:1]=[#6:2]([#6:5])[#6:3]",
+        "reactants": [
+            "c1ccccc1C(C)=CC",
+            "c1ccccc1Br"
+        ],
         "image_path": "reaction_images\\reaction_78.png"
     },
     {
         "reaction_name": "79_Stille",
+        "smirks": "[#6;$(C=C-[#6]),$(c:c):1][Br,I].[Cl,Br,I][c:2]>>[c:2][#6:1]",
+        "reactants": [
+            "c1ccccc1Br",
+            "c1ccccc1Br"
+        ],
         "image_path": "reaction_images\\reaction_79.png"
     },
     {
         "reaction_name": "80_Grignard_carbonyl",
+        "smirks": "[#6:1][C:2]#[#7;D1].[Cl,Br,I][#6;$([#6]~[#6]);!$([#6]([Cl,Br,I])[Cl,Br,I]);!$([#6]=O):3]>>[#6:1][C:2](=O)[#6:3]",
+        "reactants": [
+            "CC#N",
+            "CCBr"
+        ],
         "image_path": "reaction_images\\reaction_80.png"
     },
     {
         "reaction_name": "81_Grignard_alcohol",
+        "smirks": "[#6:1][C;H1,$([C]([#6])[#6]):2]=[OD1:3].[Cl,Br,I][#6;$([#6]~[#6]);!$([#6]([Cl,Br,I])[Cl,Br,I]);!$([#6]=O):4]>>[C:1][#6:2]([OH1:3])[#6:4]",
+        "reactants": [
+            "CC(=O)C",
+            "CCBr"
+        ],
         "image_path": "reaction_images\\reaction_81.png"
     },
     {
         "reaction_name": "82_Sonogashira",
+        "smirks": "[#6;$(C=C-[#6]),$(c:c):1][Br,I].[CH1;$(C#CC):2]>>[#6:1][C:2]",
+        "reactants": [
+            "c1cc(Br)ccc1",
+            "CC#C"
+        ],
         "image_path": "reaction_images\\reaction_82.png"
     },
     {
         "reaction_name": "83_Schotten_Baumann_amide",
+        "smirks": "[C;$(C=O):1][OH1].[N;$(N[#6]);!$(N=*);!$([N-]);!$(N#*);!$([ND3]);!$([ND4]);!$(N[O,N]);!$(N[C,S]=[S,O,N]):2]>>[C:1][N+0:2]",
+        "reactants": [
+            "CC(=O)O",
+            "NCC"
+        ],
         "image_path": "reaction_images\\reaction_83.png"
     },
     {
         "reaction_name": "84_sulfon_amide",
+        "smirks": "[S;$(S(=O)(=O)[C,N]):1][O].[N;$(NC);!$(N=*);!$([N-]);!$(N#*);!$([ND3]);!$([ND4]);!$(N[c,O]);!$(N[C,S]=[S,O,N]):2]>>[S:1][N+0:2]",
+        "reactants": [
+            "CS(=O)(=O)O",
+            "NCC"
+        ],
         "image_path": "reaction_images\\reaction_84.png"
     },
     {
         "reaction_name": "85_N_arylation_heterocycles",
+        "smirks": "[c:1]B(O)O.[nH1;+0;r5;!$(n[#6]=[O,S,N]);!$(n~n~n);!$(n~n~c~n);!$(n~c~n~n):2]>>[c:1][n:2]",
+        "reactants": [
+            "c1ccccc1B(O)O",
+            "N1C=NC=C1"
+        ],
         "image_path": "reaction_images\\reaction_85.png"
     },
     {
         "reaction_name": "86_Wittig",
+        "smirks": "[#6:3]-[C;H1,$([CH0](-[#6])[#6]);!$(CC=O):1]=[OD1].[Cl,Br,I][C;H2;$(C-[#6]);!$(CC[I,Br]);!$(CCO[CH3]):2]>>[C:3][C:1]=[C:2]",
+        "reactants": [
+            "CC(=O)C",
+            "BrCC"
+        ],
         "image_path": "reaction_images\\reaction_86.png"
     },
     {
         "reaction_name": "87_Buchwald_Hartwig",
+        "smirks": "[Cl,Br,I][c;$(c1:[c,n]:[c,n]:[c,n]:[c,n]:[c,n]:1):1].[N;$(NC)&!$(N=*)&!$([N-])&!$(N#*)&!$([ND3])&!$([ND4])&!$(N[c,O])&!$(N[C,S]=[S,O,N]),H2&$(Nc1:[c,n]:[c,n]:[c,n]:[c,n]:[c,n]:1):2]>>[c:1][N:2]",
+        "reactants": [
+            "c1ccccc1Br",
+            "CNC"
+        ],
         "image_path": "reaction_images\\reaction_87.png"
     },
     {
         "reaction_name": "88_imidazole",
+        "smirks": "[C;$(C([#6])[#6;!$([#6]Br)]):4](=[OD1])[CH;$(C([#6])[#6]):5]Br.[#7;H2:3][C;$(C(=N)(N)[c,#7]):2]=[#7;H1;D1:1]>>[C:4]1=[CH0:5][NH:3][C:2]=[N:1]1",
+        "reactants": [
+            "CC(=O)C(Br)C",
+            "N=C(N)NC"
+        ],
         "image_path": "reaction_images\\reaction_88.png"
     },
     {
         "reaction_name": "89_decarboxylative_coupling",
+        "smirks": "[c;$(c1[c;$(c[C,S,N](=[OD1])[*;R0])]cccc1):1][C;$(C(=O)[O;H1])].[c;$(c1aaccc1):2][Cl,Br,I]>>[c:1][c:2]",
+        "reactants": [
+            "c1c(C(=O)O)c([N+](=O)[O-])ccc1",
+            "c1ccccc1Br"
+        ],
         "image_path": "reaction_images\\reaction_89.png"
     },
     {
         "reaction_name": "90_heteroaromatic_nuc_sub",
+        "smirks": "[c;!$(c1ccccc1);$(c1[n,c]c[n,c]c[n,c]1):1][Cl,F].[N;$(NC);!$(N=*);!$([N-]);!$(N#*);!$([ND3]);!$([ND4]);!$(N[c,O]);!$(N[C,S]=[S,O,N]):2]>>[c:1][N:2]",
+        "reactants": [
+            "c1cnc(F)cc1",
+            "CN"
+        ],
         "image_path": "reaction_images\\reaction_90.png"
     },
     {
         "reaction_name": "91_nucl_sub_aromatic_ortho_nitro",
+        "smirks": "[c;$(c1c(N(~O)~O)cccc1):1][Cl,F].[N;$(NC);!$(N=*);!$([N-]);!$(N#*);!$([ND3]);!$([ND4]);!$(N[c,O]);!$(N[C,S]=[S,O,N]):2]>>[c:1][N:2]",
+        "reactants": [
+            "c1c([N+](=O)[O-])c(F)ccc1",
+            "CN"
+        ],
         "image_path": "reaction_images\\reaction_91.png"
     },
     {
         "reaction_name": "92_nucl_sub_aromatic_para_nitro",
+        "smirks": "[c;$(c1ccc(N(~O)~O)cc1):1][Cl,F].[N;$(NC);!$(N=*);!$([N-]);!$(N#*);!$([ND3]);!$([ND4]);!$(N[c,O]);!$(N[C,S]=[S,O,N]):2]>>[c:1][N:2]",
+        "reactants": [
+            "c1c(F)ccc([N+](=O)[O-])c1",
+            "CN"
+        ],
         "image_path": "reaction_images\\reaction_92.png"
     },
     {
         "reaction_name": "93_urea",
+        "smirks": "[N;$(N-[#6]):3]=[C;$(C=O):1].[N;$(N[#6]);!$(N=*);!$([N-]);!$(N#*);!$([ND3]);!$([ND4]);!$(N[O,N]);!$(N[C,S]=[S,O,N]):2]>>[N:3]-[C:1]-[N+0:2]",
+        "reactants": [
+            "CN=C=O",
+            "CN"
+        ],
         "image_path": "reaction_images\\reaction_93.png"
     },
     {
         "reaction_name": "94_thiourea",
+        "smirks": "[N;$(N-[#6]):3]=[C;$(C=S):1].[N;$(N[#6]);!$(N=*);!$([N-]);!$(N#*);!$([ND3]);!$([ND4]);!$(N[O,N]);!$(N[C,S]=[S,O,N]):2]>>[N:3]-[C:1]-[N+0:2]",
+        "reactants": [
+            "CN=C=S",
+            "CN"
+        ],
         "image_path": "reaction_images\\reaction_94.png"
     }
 ]
