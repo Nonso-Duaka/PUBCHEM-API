@@ -5,14 +5,18 @@ from rdkit.Chem import AllChem, Draw
 import json
 import pandas as pd
 from PIL import Image  # For saving images
+
 # GitHub repository URL containing the reaction library
 Git_repo_url = "https://raw.githubusercontent.com/durrantlab/autogrow4/master/autogrow/operators/mutation/smiles_click_chem/reaction_libraries/all_rxns/All_Rxns_rxn_library.json"
+
 # Create a directory to store reaction images
 Mol_img_dir = "reaction_images"
 os.makedirs(Mol_img_dir, exist_ok=True)
+
 # File names for storing the results in JSON and CSV formats
 json_file = "reaction_dir.json"
 csv_file = "reaction_dir.csv"
+
 # Fetch the reaction data from the GitHub repository
 response = requests.get(Git_repo_url)
 if response.status_code == 200:
@@ -20,8 +24,30 @@ if response.status_code == 200:
 else:
     print("Failed to retrieve the reaction library")
     exit()
+
 # Initialize an empty list to store reaction data
 Rxn_list = []
+
+def preprocess_reactants(reactants):
+    """
+    Removes metal cations (Na, K, Li) from ionic reactants like CCO[Na],
+    converting them to their reactive forms (e.g., CC[O-]).
+    """
+    processed_reactants = []
+    for smiles in reactants:
+        mol = Chem.MolFromSmiles(smiles)
+        if mol is None:
+            print(f"Warning: Could not parse {smiles}")
+            processed_reactants.append(smiles)
+            continue
+        # Remove alkali metal cations (Na=11, K=19, Li=3)
+        for atom in mol.GetAtoms():
+            if atom.GetAtomicNum() in [11, 19, 3]:  # Na, K, Li
+                mol = Chem.DeleteSubstructs(mol, Chem.MolFromSmarts("[Na,K,Li]"))
+                break
+        processed_reactants.append(Chem.MolToSmiles(mol))
+    return processed_reactants
+
 def generate_rxn_image(reaction_name, smirks, reactants, idx, Mol_img_dir):
     """
     Generates and saves an image for a chemical reaction based on SMIRKS and reactants.
@@ -35,53 +61,74 @@ def generate_rxn_image(reaction_name, smirks, reactants, idx, Mol_img_dir):
     - str: The file path where the reaction image was saved, or None if the image could not be generated.
     """
     try:
+        print(f"Generating reaction image for {reaction_name} with SMIRKS: {smirks} and reactants: {reactants}")
+
+        # Preprocess reactants to remove metal cations
+        cleaned_reactants = preprocess_reactants(reactants)
+
         # Generate reaction object from SMIRKS
         reaction = AllChem.ReactionFromSmarts(smirks)
         if reaction is None:
-            print(f"Failed to generate reaction object for {reaction_name}")
+            print(f"ERROR: Failed to generate reaction object for {reaction_name}")
             return None
+
         # Parse reactant SMILES into molecules
-        reactant_mols = [Chem.MolFromSmiles(smiles) for smiles in reactants]
+        reactant_mols = [Chem.MolFromSmiles(smiles) for smiles in cleaned_reactants]
         if None in reactant_mols:
-            print(f"Failed to parse reactants for {reaction_name}")
-            return None 
+            print(f"ERROR: Failed to parse reactants for {reaction_name}. Check input: {cleaned_reactants}")
+            return None
+
         # Run the reaction on the reactants
         products = reaction.RunReactants(tuple(reactant_mols))
         if not products or not products[0]:
-            print(f"Failed to run reactants to get product for {reaction_name}")
+            print(f"ERROR: Failed to run reactants for {reaction_name}. Reactants: {cleaned_reactants}")
             return None
-        # Create a full reaction object by adding reactant and product templates
+
+        # Create a full reaction object
         full_reaction = AllChem.ChemicalReaction()
         for mol in reactant_mols:
             full_reaction.AddReactantTemplate(mol)
         for mol in products[0]:
             full_reaction.AddProductTemplate(mol)
-        full_reaction.Initialize()    
+        full_reaction.Initialize()
+
         # Generate and save the reaction image
         img = Draw.ReactionToImage(full_reaction, subImgSize=(400, 400))
         img_path = os.path.join(Mol_img_dir, f"reaction_{idx+1}.png")
-        img.save(img_path)  # Save the image using PIL
+        img.save(img_path)
         print(f"Processed {reaction_name} and saved image to {img_path}")
         return img_path
+
     except Exception as e:
-        print(f"Failed to process {reaction_name}: {e}")
+        print(f"ERROR: Failed to process {reaction_name}: {e}")
         return None
+
 # Process each reaction in the fetched reaction data
 for idx, (reaction_name, reaction_info) in enumerate(rxn_data.items()):
     try:
         smirks = reaction_info.get('reaction_string')
-        default_reactants = reaction_info.get('example_rxn_reactants', [])    
+        default_reactants = reaction_info.get('example_rxn_reactants', [])
+
         print(f"\nProcessing {reaction_name}")
+
+        # Debug: Print available default reactants
+        print(f"Default reactants for {reaction_name}: {default_reactants}")
+
         # Allow the user to input reactant SMILES or use default ones
         user_input = input("Enter reactant SMILES (comma-separated) or press enter to use default: ").strip()
-        reactants = user_input.split(',') if user_input else default_reactants 
+        reactants = user_input.split(',') if user_input else default_reactants
+
+        # Debug: Show selected reactants
+        print(f"Using reactants: {reactants}")
+
         # Validate SMIRKS and reactants
         if not smirks:
             print(f"Skipping {reaction_name}: Missing SMIRKS")
             continue
         if not reactants:
             print(f"Skipping {reaction_name}: Missing reactants")
-            continue 
+            continue
+
         # Generate the reaction image and save it
         img_path = generate_rxn_image(reaction_name, smirks, reactants, idx, Mol_img_dir)
         if img_path:
@@ -92,8 +139,10 @@ for idx, (reaction_name, reaction_info) in enumerate(rxn_data.items()):
                 "reactants": reactants,
                 "image_path": img_path
             })
+
     except Exception as e:
-        print(f"Failed to process {reaction_name}: {e}")
+        print(f"ERROR: Failed to process {reaction_name}: {e}")
+
 # Save the results to JSON and CSV files
 if Rxn_list:
     with open(json_file, "w") as f:
