@@ -28,26 +28,6 @@ else:
 # Initialize an empty list to store reaction data
 Rxn_list = []
 
-def preprocess_reactants(reactants):
-    """
-    Removes metal cations (Na, K, Li) from ionic reactants like CCO[Na],
-    converting them to their reactive forms (e.g., CC[O-]).
-    """
-    processed_reactants = []
-    for smiles in reactants:
-        mol = Chem.MolFromSmiles(smiles)
-        if mol is None:
-            print(f"Warning: Could not parse {smiles}")
-            processed_reactants.append(smiles)
-            continue
-        # Remove alkali metal cations (Na=11, K=19, Li=3)
-        for atom in mol.GetAtoms():
-            if atom.GetAtomicNum() in [11, 19, 3]:  # Na, K, Li
-                mol = Chem.DeleteSubstructs(mol, Chem.MolFromSmarts("[Na,K,Li]"))
-                break
-        processed_reactants.append(Chem.MolToSmiles(mol))
-    return processed_reactants
-
 def generate_rxn_image(reaction_name, smirks, reactants, idx, Mol_img_dir):
     """
     Generates and saves an image for a chemical reaction based on SMIRKS and reactants.
@@ -63,9 +43,6 @@ def generate_rxn_image(reaction_name, smirks, reactants, idx, Mol_img_dir):
     try:
         print(f"Generating reaction image for {reaction_name} with SMIRKS: {smirks} and reactants: {reactants}")
 
-        # Preprocess reactants to remove metal cations
-        cleaned_reactants = preprocess_reactants(reactants)
-
         # Generate reaction object from SMIRKS
         reaction = AllChem.ReactionFromSmarts(smirks)
         if reaction is None:
@@ -73,15 +50,15 @@ def generate_rxn_image(reaction_name, smirks, reactants, idx, Mol_img_dir):
             return None
 
         # Parse reactant SMILES into molecules
-        reactant_mols = [Chem.MolFromSmiles(smiles) for smiles in cleaned_reactants]
+        reactant_mols = [Chem.MolFromSmiles(smiles) for smiles in reactants]
         if None in reactant_mols:
-            print(f"ERROR: Failed to parse reactants for {reaction_name}. Check input: {cleaned_reactants}")
+            print(f"ERROR: Failed to parse reactants for {reaction_name}. Check input: {reactants}")
             return None
 
         # Run the reaction on the reactants
         products = reaction.RunReactants(tuple(reactant_mols))
         if not products or not products[0]:
-            print(f"ERROR: Failed to run reactants for {reaction_name}. Reactants: {cleaned_reactants}")
+            print(f"ERROR: Failed to run reactants for {reaction_name}. Reactants: {reactants}")
             return None
 
         # Create a full reaction object
@@ -141,6 +118,7 @@ for idx, (reaction_name, reaction_info) in enumerate(rxn_data.items()):
             })
 
     except Exception as e:
+        
         print(f"ERROR: Failed to process {reaction_name}: {e}")
 
 # Save the results to JSON and CSV files
