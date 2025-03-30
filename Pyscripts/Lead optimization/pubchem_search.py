@@ -1,8 +1,9 @@
 import requests
 import json
 from time import sleep
-from urllib.parse import quote
+import re
 import os
+from urllib.parse import quote
 
 class PubChemSMARTSQuery:
     def __init__(self):
@@ -24,7 +25,8 @@ class PubChemSMARTSQuery:
             raise Exception(f"Error fetching reaction data: {str(e)}")
     
     def search_by_smarts(self, smarts_pattern):
-        """Search PubChem for compounds matching a SMARTS pattern using POST"""
+        """Search PubChem for compounds matching a SMARTS pattern using POST.
+        Returns ALL CIDs found, even if JSON parsing fails."""
         url = f"{self.base_url}/compound/fastsubstructure/smarts/cids/JSON"
         
         print(f"\nSearching for pattern: {smarts_pattern}")
@@ -35,28 +37,63 @@ class PubChemSMARTSQuery:
         
         try:
             response = requests.post(url, data=data, headers=headers, timeout=self.timeout)
-            sleep(self.delay)  # Sleep to avoid rate limiting
+            sleep(self.delay)
             
             if response.status_code != 200:
                 print(f"Error: Status code {response.status_code}")
-                print(f"Response text: {response.text[:500]}")  # Print first 500 chars of response
+                print(f"Response text: {response.text[:500]}")
                 return []
                 
+            # Save raw response for debugging
+            with open("last_response.txt", "w") as f:
+                f.write(response.text)
+            
+            # List to store ALL found CIDs (from both JSON and text extraction)
+            all_cids = []
+            
+            # 1. First try to parse as complete JSON
             try:
                 result = response.json()
-                cids = result.get('IdentifierList', {}).get('CID', [])
-                print(f"Found {len(cids)} matching compounds")
-                
-                # Limit results
-                return cids[:self.max_results] if len(cids) > self.max_results else cids
-            except json.JSONDecodeError as e:
-                print(f"Error decoding JSON response: {str(e)}")
-                print(f"Response content: {response.text[:500]}...")  # Print first 500 chars
-                return []
+                json_cids = result.get('IdentifierList', {}).get('CID', [])
+                print(f"Found {len(json_cids)} CIDs via JSON parse")
+                all_cids.extend(json_cids)
+            except json.JSONDecodeError:
+                print("Warning: JSON parse failed (will rely on text extraction)")
+            
+            # 2. ALWAYS try to extract CIDs from text (even if JSON parse worked)
+            text_cids = self._extract_cids_from_text(response.text)
+            print(f"Extracted {len(text_cids)} CIDs from text response")
+            all_cids.extend(text_cids)
+            
+            # Remove duplicates while preserving order
+            seen = set()
+            unique_cids = [x for x in all_cids if not (x in seen or seen.add(x))]
+            
+            print(f"Total unique CIDs found: {len(unique_cids)}")
+            return unique_cids[:self.max_results] if len(unique_cids) > self.max_results else unique_cids
                 
         except requests.exceptions.RequestException as e:
             print(f"Request failed: {str(e)}")
             return []
+    
+    def _extract_cids_from_text(self, response_text):
+        """Extract CIDs from raw response text using multiple patterns"""
+        cids = []
+        # Multiple patterns to catch different formats
+        patterns = [
+            r'"CID":\s*\[([\d,\s]+)',      # Standard JSON format
+            r'"CID"\s*:\s*\[([\d\s,]+)',   # Variant with different spacing
+            r'\[(\d+(?:\s*,\s*\d+)*)\]',    # Bare arrays
+            r'\b\d{3,}\b'                   # Standalone large numbers (likely CIDs)
+        ]
+        
+        for pattern in patterns:
+            matches = re.findall(pattern, response_text)
+            for match in matches:
+                numbers = re.findall(r'\d+', str(match))
+                cids.extend([int(cid) for cid in numbers])
+        
+        return cids
     
     def get_smiles_for_cids(self, cids):
         """Get SMILES for a list of compound IDs"""
@@ -68,7 +105,7 @@ class PubChemSMARTSQuery:
         
         try:
             response = requests.get(url, timeout=self.timeout)
-            sleep(self.delay)  # Sleep to avoid rate limiting
+            sleep(self.delay)
             
             if response.status_code != 200:
                 print(f"Error: Status code {response.status_code}")
@@ -94,7 +131,6 @@ class PubChemSMARTSQuery:
     
     def query_all_reactions(self, output_file="reaction_fragments.json"):
         """Query PubChem for all reaction SMARTS patterns"""
-        # Get reaction data
         try:
             reaction_data = self.get_reaction_data()
         except Exception as e:
@@ -105,11 +141,10 @@ class PubChemSMARTSQuery:
         total_reactions = len(reaction_data)
         processed = 0
         
-        # Process each reaction
         for rxn_name, rxn_info in reaction_data.items():
             processed += 1
             if 'group_smarts' not in rxn_info or not rxn_info['group_smarts']:
-                print(f"\n[{processed}/{total_reactions}] Skipping {rxn_name}: No group_smarts found")
+                print(f"\n[{processed}/{total_reactions}] Skipping {rxn_name}: No group_smarts")
                 continue
                 
             print(f"\n[{processed}/{total_reactions}] Processing reaction: {rxn_name}")
@@ -120,24 +155,19 @@ class PubChemSMARTSQuery:
                 'reactants': []
             }
             
-            # Process each SMARTS pattern for this reaction
             for i, smarts in enumerate(rxn_info['group_smarts']):
                 print(f"\nProcessing reactant {i+1}/{len(rxn_info['group_smarts'])}")
                 print(f"SMARTS pattern: {smarts}")
                 
-                # Search for compounds
                 cids = self.search_by_smarts(smarts)
                 
                 if cids:
-                    # Get SMILES for these CIDs
                     compounds = self.get_smiles_for_cids(cids)
-                    
                     results[rxn_name]['reactants'].append({
                         'smarts': smarts,
                         'compounds': compounds,
                         'num_compounds': len(compounds)
                     })
-                    
                     print(f"Found {len(compounds)} compounds for this reactant")
                 else:
                     results[rxn_name]['reactants'].append({
@@ -145,12 +175,10 @@ class PubChemSMARTSQuery:
                         'compounds': [],
                         'num_compounds': 0
                     })
-                    print(f"No compounds found for this reactant")
+                    print("No compounds found for this reactant")
                 
-                # Save intermediate results after each reactant
                 self._save_intermediate_results(results, output_file)
         
-        # Final save to JSON file
         self._save_final_results(results, output_file)
         return results
     
@@ -172,7 +200,6 @@ class PubChemSMARTSQuery:
         except Exception as e:
             print(f"Error saving final results: {str(e)}")
 
-# Run the script
 if __name__ == "__main__":
     print("Starting PubChem query using reaction SMARTS patterns...")
     querier = PubChemSMARTSQuery()
