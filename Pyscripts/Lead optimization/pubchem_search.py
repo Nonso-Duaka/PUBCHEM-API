@@ -4,6 +4,8 @@ from time import sleep
 import re
 import os
 from urllib.parse import quote
+import hashlib
+from tqdm import tqdm
 
 class PubChemSMARTSQuery:
     def __init__(self):
@@ -11,91 +13,117 @@ class PubChemSMARTSQuery:
         self.delay = 1.5
         self.timeout = 30
         self.max_mw = 150
-        self.page_size = 100
+        self.page_size = 250
+        self.cache_dir = "cache"
+        os.makedirs(self.cache_dir, exist_ok=True)
+
+    def _get_cache_path(self, url):
+        """Generate cache file path for a URL."""
+        cache_hash = hashlib.md5(url.encode()).hexdigest()
+        return os.path.join(self.cache_dir, f"{cache_hash}.json")
+
+    def _cached_get(self, url):
+        """Make GET request with caching."""
+        cache_path = self._get_cache_path(url)
         
+        # Try cache first
+        if os.path.exists(cache_path):
+            with open(cache_path, 'r') as f:
+                return json.load(f)
+        
+        # Make request and cache
+        response = requests.get(url, timeout=self.timeout)
+        sleep(self.delay)
+        
+        if response.status_code == 200:
+            try:
+                data = response.json()
+            except:
+                data = {"text": response.text}
+            
+            with open(cache_path, 'w') as f:
+                json.dump(data, f)
+            return data
+        
+        return None
+
     def get_reaction_data(self):
         url = "https://raw.githubusercontent.com/durrantlab/autogrow4/master/autogrow/operators/mutation/smiles_click_chem/reaction_libraries/all_rxns/All_Rxns_rxn_library.json"
         print("Fetching reaction data from GitHub...")
-        try:
-            response = requests.get(url, timeout=self.timeout)
-            if response.status_code != 200:
-                raise Exception(f"Failed to fetch reaction data: Status {response.status_code}")
-            return response.json()
-        except requests.exceptions.RequestException as e:
-            raise Exception(f"Error fetching reaction data: {str(e)}")
-    
+        
+        data = self._cached_get(url)
+        if data is None:
+            raise Exception("Failed to fetch reaction data")
+        return data
+
     def search_by_smarts(self, smarts_pattern):
-        url = f"{self.base_url}/compound/fastsubstructure/smarts/cids/JSON"
         print(f"\nSearching for pattern: {smarts_pattern}")
-        data = {'smarts': smarts_pattern}
-        headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-        try:
-            count_url = f"{self.base_url}/compound/fastsubstructure/smarts/cids/TXT?smarts={quote(smarts_pattern)}"
-            count_response = requests.get(count_url, timeout=self.timeout)
-            sleep(self.delay)
-            if count_response.status_code != 200:
-                print(f"Error getting count: Status code {count_response.status_code}")
-                print(f"Response text: {count_response.text[:500]}")
-                return []
-            all_cids = self._extract_cids_from_text(count_response.text)
-            total_cids = len(all_cids)
-            print(f"Total compounds found: {total_cids}")
-            if not all_cids:
-                return []
-            filtered_cids = []
-            for i in range(0, len(all_cids), self.page_size):
-                page_cids = all_cids[i:i + self.page_size]
-                print(f"Processing page {i//self.page_size + 1} with {len(page_cids)} compounds...")
-                properties = self._get_compound_properties(page_cids)
-                for cid, mw in properties:
-                    try:
-                        mw_float = float(mw) if isinstance(mw, str) else mw
-                        if mw_float is not None and mw_float <= self.max_mw:
-                            filtered_cids.append(cid)
-                    except (ValueError, TypeError) as e:
-                        print(f"Warning: Could not parse MW for CID {cid}: {str(e)}")
-                        continue
-                print(f"After MW filtering: {len(filtered_cids)} compounds so far")
-            print(f"Final count after MW filtering: {len(filtered_cids)}/{total_cids} compounds")
-            return filtered_cids
-        except requests.exceptions.RequestException as e:
-            print(f"Request failed: {str(e)}")
+        
+        count_url = f"{self.base_url}/compound/fastsubstructure/smarts/cids/TXT?smarts={quote(smarts_pattern)}"
+        data = self._cached_get(count_url)
+        
+        if data is None:
             return []
-    
+        
+        response_text = data.get("text", "")
+        all_cids = self._extract_cids_from_text(response_text)
+        total_cids = len(all_cids)
+        print(f"Total compounds found: {total_cids}")
+        
+        if not all_cids:
+            return []
+        
+        filtered_cids = []
+        pages = range(0, len(all_cids), self.page_size)
+        
+        pbar = tqdm(pages, desc="Processing pages (0 fragments found)")
+        for i in pbar:
+            page_cids = all_cids[i:i + self.page_size]
+            properties = self._get_compound_properties(page_cids)
+            
+            for cid, mw in properties:
+                try:
+                    mw_float = float(mw) if isinstance(mw, str) else mw
+                    if mw_float is not None and mw_float <= self.max_mw:
+                        filtered_cids.append(cid)
+                except (ValueError, TypeError) as e:
+                    continue
+            
+            # Update progress bar description with current count
+            pbar.set_description(f"Processing pages ({len(filtered_cids)} fragments found)")
+        
+        print(f"Final count after MW filtering: {len(filtered_cids)}/{total_cids} compounds")
+        return filtered_cids
+
     def _get_compound_properties(self, cids):
         if not cids:
             return []
+
         cid_str = ",".join(map(str, cids))
         url = f"{self.base_url}/compound/cid/{cid_str}/property/MolecularWeight/JSON"
-        try:
-            response = requests.get(url, timeout=self.timeout)
-            sleep(self.delay)
-            if response.status_code != 200:
-                print(f"Error getting properties: Status code {response.status_code}")
-                print(f"Response text: {response.text[:500]}")
-                return [(cid, None) for cid in cids]
-            results = []
-            try:
-                data = response.json()
-                if 'PropertyTable' in data and 'Properties' in data['PropertyTable']:
-                    for prop in data['PropertyTable']['Properties']:
-                        cid = prop.get('CID')
-                        mw = prop.get('MolecularWeight')
-                        if mw is not None:
-                            try:
-                                mw = float(mw)
-                            except (ValueError, TypeError):
-                                mw = None
-                        results.append((cid, mw))
-                return results
-            except Exception as e:
-                print(f"Error processing property data: {str(e)}")
-                print(f"Response content: {response.text[:500]}...")
-                return [(cid, None) for cid in cids]
-        except requests.exceptions.RequestException as e:
-            print(f"Request failed: {str(e)}")
+        
+        data = self._cached_get(url)
+        if data is None:
+            print(f"Error getting properties")
             return [(cid, None) for cid in cids]
-    
+
+        results = []
+        try:
+            if 'PropertyTable' in data and 'Properties' in data['PropertyTable']:
+                for prop in data['PropertyTable']['Properties']:
+                    cid = prop.get('CID')
+                    mw = prop.get('MolecularWeight')
+                    if mw is not None:
+                        try:
+                            mw = float(mw)
+                        except (ValueError, TypeError):
+                            mw = None
+                    results.append((cid, mw))
+            return results
+        except Exception as e:
+            print(f"Error processing property data: {str(e)}")
+            return [(cid, None) for cid in cids]
+
     def _extract_cids_from_text(self, response_text):
         cids = []
         patterns = [
@@ -116,41 +144,37 @@ class PubChemSMARTSQuery:
     def get_smiles_for_cids(self, cids):
         if not cids:
             return []
+
         results = []
         for i in range(0, len(cids), self.page_size):
             page_cids = cids[i:i + self.page_size]
             cid_str = ",".join(map(str, page_cids))
             url = f"{self.base_url}/compound/cid/{cid_str}/property/CanonicalSMILES,IsomericSMILES/JSON"
+            
+            data = self._cached_get(url)
+            if data is None:
+                continue
+
             try:
-                response = requests.get(url, timeout=self.timeout)
-                sleep(self.delay)
-                if response.status_code != 200:
-                    print(f"Error: Status code {response.status_code}")
-                    print(f"Response text: {response.text[:500]}")
-                    continue
-                try:
-                    data = response.json()
-                    if 'PropertyTable' in data and 'Properties' in data['PropertyTable']:
-                        for prop in data['PropertyTable']['Properties']:
-                            results.append({
-                                'CID': prop.get('CID'),
-                                'CanonicalSMILES': prop.get('CanonicalSMILES', ''),
-                                'IsomericSMILES': prop.get('IsomericSMILES', '')
-                            })
-                except Exception as e:
-                    print(f"Error processing SMILES data: {str(e)}")
-                    print(f"Response content: {response.text[:500]}...")
-            except requests.exceptions.RequestException as e:
-                print(f"Request failed: {str(e)}")
+                if 'PropertyTable' in data and 'Properties' in data['PropertyTable']:
+                    for prop in data['PropertyTable']['Properties']:
+                        results.append({
+                            'CID': prop.get('CID'),
+                            'CanonicalSMILES': prop.get('CanonicalSMILES', ''),
+                            'IsomericSMILES': prop.get('IsomericSMILES', '')
+                        })
+            except Exception as e:
+                print(f"Error processing SMILES data: {str(e)}")
+
         return results
-    
+
     def query_all_reactions(self, output_file="reaction_fragments.json"):
         try:
             reaction_data = self.get_reaction_data()
         except Exception as e:
             print(f"Fatal error: {str(e)}")
             return {}
-        
+
         temp_file = f"temp_{output_file}"
         if os.path.exists(temp_file):
             with open(temp_file, 'r') as f:
@@ -158,28 +182,27 @@ class PubChemSMARTSQuery:
             print(f"Resuming from saved progress in {temp_file}...")
         else:
             results = {}
-        
+
         total_reactions = len(reaction_data)
-        processed = 0
         
         try:
-            for rxn_name, rxn_info in reaction_data.items():
-                processed += 1
+            for rxn_name, rxn_info in tqdm(reaction_data.items(), desc="Processing reactions"):
                 if rxn_name in results:
-                    print(f"\n[{processed}/{total_reactions}] Skipping already processed reaction: {rxn_name}")
                     continue
+                
                 if 'group_smarts' not in rxn_info or not rxn_info['group_smarts']:
-                    print(f"\n[{processed}/{total_reactions}] Skipping {rxn_name}: No group_smarts")
                     continue
-                print(f"\n[{processed}/{total_reactions}] Processing reaction: {rxn_name}")
+                
                 results[rxn_name] = {
                     'reaction_name': rxn_info.get('reaction_name', rxn_name),
                     'group_smarts': rxn_info['group_smarts'],
                     'reactants': []
                 }
+                
                 for i, smarts in enumerate(rxn_info['group_smarts']):
                     print(f"\nProcessing reactant {i+1}/{len(rxn_info['group_smarts'])}")
                     print(f"SMARTS pattern: {smarts}")
+                    
                     cids = self.search_by_smarts(smarts)
                     if cids:
                         compounds = self.get_smiles_for_cids(cids)
@@ -196,7 +219,9 @@ class PubChemSMARTSQuery:
                             'num_compounds': 0
                         })
                         print("No compounds found for this reactant")
+                    
                     self._save_intermediate_results(results, output_file)
+        
         except KeyboardInterrupt:
             print("\nInterrupted by user. Progress saved.")
             self._save_final_results(results, output_file)
