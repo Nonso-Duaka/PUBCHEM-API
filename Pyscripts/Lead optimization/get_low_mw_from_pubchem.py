@@ -183,18 +183,15 @@ class PubChemSmallMoleculeExtractor:
             except Exception:
                 # If MW estimation fails, skip this compound
                 return None
-            # Round the MW *before* checking against the threshold. This ensures
-            # that a compound with MW 149.9998, which rounds to 150.000,
-            # is correctly excluded.
-            rounded_mw = round(mw, 3)
+
             # Check molecular weight threshold on the rounded value
-            if rounded_mw >= self.max_mw:
+            if mw >= self.max_mw:
                 return None
             
             return {
                 'CID': cid,
                 'SMILES': smiles,
-                'MW': rounded_mw
+                'MW': mw
             }
             
         except (ValueError, AttributeError) as e:
@@ -528,13 +525,13 @@ def main() -> None:
     
     # For testing, limit the number of files
     print("\nStarting extraction with first 2 files for testing...")
-    newly_found_compounds = extractor.extract_all_small_molecules(max_files=2)
+    newly_found_compounds = extractor.extract_all_small_molecules(max_files=None)
     # Analyze the results from THIS RUN
     extractor.analyze_results(newly_found_compounds)
     # Export a SMILES file containing only the compounds from THIS RUN
     extractor.export_smiles_file(
         newly_found_compounds,
-        output_file="newly_found_molecules.smi"
+        output_file="small_molecules.smi"
     )
     # The full, cumulative database is always stored in small_molecules.json/.csv
     # To run a full extraction, you can remove the `max_files` argument.
