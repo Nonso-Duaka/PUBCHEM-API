@@ -3,7 +3,7 @@
 PubChem Small Molecule Extractor - Fast Version (No RDKit)
 
 Downloads PubChem SDF files one by one from FTP and extracts CID + SMILES
-for compounds with molecular weight < 150 Da. Uses simple atom counting
+for compounds with molecular weight < 250.0 Da. Uses simple atom counting
 for desalting instead of RDKit for much faster performance.
 
 Requirements:
@@ -22,7 +22,7 @@ from typing import List, Dict, Tuple, Set, Any, Optional
 
 
 class PubChemSmallMoleculeExtractor:
-    def __init__(self, max_mw: float = 150.0) -> None:
+    def __init__(self, max_mw: float = 250.0) -> None:
         """
         Initialize the extractor.
         
@@ -163,6 +163,12 @@ class PubChemSmallMoleculeExtractor:
             if not smiles_match:
                 # Try alternative SMILES field
                 smiles_match = re.search(r'> <PUBCHEM_OPENEYE_ISO_SMILES>\n([^\n]+)', record)
+            if not smiles_match:
+                # Try another alternative SMILES field
+                smiles_match = re.search(r'> <PUBCHEM_CONNECTIVITY_SMILES>\n([^\n]+)', record)
+            if not smiles_match:
+                # Try another alternative SMILES field
+                smiles_match = re.search(r'> <PUBCHEM_SMILES>\n([^\n]+)', record)
             
             if not smiles_match:
                 # This was an `assert False` which would crash the script.
@@ -219,6 +225,8 @@ class PubChemSmallMoleculeExtractor:
             
             # End of record marker
             if line.strip() == "$$$$":
+                # import pdb; pdb.set_trace()  # Debugging breakpoint
+
                 compound = self.parse_sdf_record(current_record)
                 if compound:
                     smiles = compound['SMILES']
@@ -334,7 +342,7 @@ class PubChemSmallMoleculeExtractor:
             print(f"Response status code: {getattr(response, 'status_code', 'N/A')}")
             return []
     
-    def extract_all_small_molecules(self, output_file: str = "small_molecules.json",
+    def extract_all_small_molecules(self, output_file: str = "1.small_molecules_1st_pass.json",
                                         resume: bool = True, max_files: Optional[int] = None) -> List[Dict[str, Any]]:
         """
         Download and process all PubChem SDF files to extract small molecules.
@@ -440,7 +448,7 @@ class PubChemSmallMoleculeExtractor:
         except Exception as e:
             print(f"Error saving progress: {e}")
     
-    def export_smiles_file(self, compounds: List[Dict[str, Any]], output_file: str = "small_molecules.smi") -> None:
+    def export_smiles_file(self, compounds: List[Dict[str, Any]], output_file: str = "1.small_molecules_1st_pass.smi") -> None:
         """
         Export results as a simple SMILES file.
         
@@ -455,6 +463,7 @@ class PubChemSmallMoleculeExtractor:
             print(f"SMILES file with {len(compounds)} entries saved to {output_file}")
         except Exception as e:
             print(f"Error saving SMILES file: {e}")
+
     def analyze_results(self, compounds: List[Dict[str, Any]]) -> None:
         """
         Print analysis of the provided list of compounds.
@@ -487,31 +496,31 @@ def main() -> None:
     print("=" * 60)
     
     # Initialize extractor
-    extractor = PubChemSmallMoleculeExtractor(max_mw=150.0)
+    extractor = PubChemSmallMoleculeExtractor(max_mw=250.0)
     
-    # Test desalting functionality
-    print("\nTesting desalting functionality...")
-    test_cases = [
-        "CCO",  # ethanol (no salt)
-        "C(=O)(C(=O)[O-])N.[Na+]",  # sodium salt example
-        "CC(C)CC(C(=O)[O-])N.[Na+]",  # another salt
-        "CC(=O)O.CCN",  # mixture
-        "C1=CC=CC=C1.[Cl-]",  # benzene with chloride
-        "c1ccccc1Cl" # aromatic example with two-letter element
-    ]
+    # # Test desalting functionality
+    # print("\nTesting desalting functionality...")
+    # test_cases = [
+    #     "CCO",  # ethanol (no salt)
+    #     "C(=O)(C(=O)[O-])N.[Na+]",  # sodium salt example
+    #     "CC(C)CC(C(=O)[O-])N.[Na+]",  # another salt
+    #     "CC(=O)O.CCN",  # mixture
+    #     "C1=CC=CC=C1.[Cl-]",  # benzene with chloride
+    #     "c1ccccc1Cl" # aromatic example with two-letter element
+    # ]
     
-    for smiles in test_cases:
-        desalted = extractor.desalt_smiles(smiles)
-        if desalted:
-            try:
-                mw = extractor.estimate_molecular_weight(desalted)
-                atom_count = extractor.count_atoms_in_smiles_part(desalted)
-                print(f"  {smiles}")
-                print(f" -> {desalted} (MW: {mw:.2f}, atoms: {atom_count})")
-            except Exception as e:
-                print(f" -> {desalted} (MW calculation failed: {e})")
-        else:
-            print(f"  {smiles} -> FAILED")
+    # for smiles in test_cases:
+    #     desalted = extractor.desalt_smiles(smiles)
+    #     if desalted:
+    #         try:
+    #             mw = extractor.estimate_molecular_weight(desalted)
+    #             atom_count = extractor.count_atoms_in_smiles_part(desalted)
+    #             print(f"  {smiles}")
+    #             print(f" -> {desalted} (MW: {mw:.2f}, atoms: {atom_count})")
+    #         except Exception as e:
+    #             print(f" -> {desalted} (MW calculation failed: {e})")
+    #     else:
+    #         print(f"  {smiles} -> FAILED")
     
     # Test with just getting the file list first
     print("\nTesting file list retrieval...")
@@ -524,16 +533,20 @@ def main() -> None:
     print(f"SUCCESS: Found {len(files)} files")
     
     # For testing, limit the number of files
-    print("\nStarting extraction with first 2 files for testing...")
-    newly_found_compounds = extractor.extract_all_small_molecules(max_files=None)
+    print("\nStarting compound extraction...")
+    max_files = None
+    newly_found_compounds = extractor.extract_all_small_molecules(max_files=max_files)
+
     # Analyze the results from THIS RUN
     extractor.analyze_results(newly_found_compounds)
+
     # Export a SMILES file containing only the compounds from THIS RUN
     extractor.export_smiles_file(
         newly_found_compounds,
-        output_file="small_molecules.smi"
+        output_file="1.small_molecules_1st_pass.smi"
     )
-    # The full, cumulative database is always stored in small_molecules.json/.csv
+    
+    # The full, cumulative database is always stored in 1.small_molecules_1st_pass.json/.csv
     # To run a full extraction, you can remove the `max_files` argument.
     # Example for a full run (will take a long time):
     # print("\nStarting full extraction...")
